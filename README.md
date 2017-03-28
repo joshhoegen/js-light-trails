@@ -1,5 +1,6 @@
 # React Redux minimal starter kit (boilerplate)
 
+https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Manipulating_video_using_canvas
 https://hmp.is.it/creating-chroma-key-effect-html5-canvas/
 
 <br><a href="http://redux-minimal.js.org/"><img src="http://redux-minimal.js.org/logo/redux-minimal-logo-blue.svg"></a><br><br>
