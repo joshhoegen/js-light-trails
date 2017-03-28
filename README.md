@@ -1,5 +1,6 @@
 # React Redux minimal starter kit (boilerplate)
 
+https://hmp.is.it/creating-chroma-key-effect-html5-canvas/
 
 <br><a href="http://redux-minimal.js.org/"><img src="http://redux-minimal.js.org/logo/redux-minimal-logo-blue.svg"></a><br><br>
 
