@@ -1,7 +1,7 @@
 {
-  "name": "redux-minimal",
+  "name": "chroma-kiss",
   "version": "1.0.0",
-  "description": "Start building complex react-redux apps today, with this minimalist easy to understand starter kit (boilerplate)",
+  "description": "JS Art in React",
   "keywords": [
     "react",
     "redux",
@@ -10,10 +10,10 @@
     "boilerplate"
   ],
   "main": "index.js",
-  "homepage": "http://redux-minimal.js.org/",
+  "homepage": "http://joshhoegen.com/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/catalin-luntraru/redux-minimal"
+    "url": "https://github.com/joshhoegen"
   },
   "scripts": {
     "start": "webpack-dev-server --inline --hot --history-api-fallback --host localhost --port 8080",
@@ -29,7 +29,7 @@
       "stage-3"
     ]
   },
-  "author": "Catalin Luntraru",
+  "author": "Josh Hoegen",
   "license": "MIT",
   "dependencies": {
     "react": "^15.4.2",
