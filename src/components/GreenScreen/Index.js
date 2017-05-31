@@ -1,5 +1,5 @@
 import React from "react";
-import {init, draw, DrawVideoOnCanvas} from "../../../lib/HTML5ChromaKey/chroma-demo";
+import {init, draw, DrawVideoOnCanvas} from "../../lib/HTML5ChromaKey/chroma-demo";
 
 // Home page component
 // export default class Home extends React.Component {
@@ -55,8 +55,7 @@ export default class GreenScreen   extends React.Component {
           </div>
           <div id="source">
             <video style={{}} id="videodata" loop="loop" preload="auto" autoPlay="autoplay" width={600} height={400}>
-              <source src="PixieGreenScreen539_512kb.mp4" type="video/mp4" />
-              <source src="PixieGreenScreen539.ogv" type="video/ogg" />
+              
             </video>
           </div>
         </div>
