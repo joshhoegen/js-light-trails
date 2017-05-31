@@ -1,0 +1,42 @@
+body {
+  font-family: Verdana;
+  font-size: 12px;
+}
+h1 {
+  font-size: 14px;
+  font-weight: bold;
+}
+#output {
+  background: #333;
+}
+canvas {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 600px;
+  height: 450px;
+  z-index: 1050;
+}
+#videoscreen {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 600px;
+  height: 450px;
+  z-index: 1050;
+}
+#source {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 600px;
+  height: 450px;
+  z-index: 1049;
+}
