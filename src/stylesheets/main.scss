@@ -15,19 +15,22 @@ canvas {
   bottom: 0;
   left: 0;
   right: 0;
-  width: 600px;
-  height: 450px;
+  width: 100%;
+  height: 100%;
   z-index: 1050;
 }
-#videoscreen {
+video {
   display: none;
+}
+#videoscreen {
+  // display: none;
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  width: 600px;
-  height: 450px;
+  width: 100%;
+  height: 100%;
   z-index: 1050;
 }
 #source {
@@ -36,7 +39,16 @@ canvas {
   bottom: 0;
   left: 0;
   right: 0;
-  width: 600px;
-  height: 450px;
+  width: 100%;
+  height: 100%;
   z-index: 1049;
 }
+
+// #output {
+//   $elements: 33;
+//   @for $i from 0 to $elements {
+//     canvas:nth-child(#{$i}) {
+//        opacity: $i * 3;
+//     }
+//   }
+// }
