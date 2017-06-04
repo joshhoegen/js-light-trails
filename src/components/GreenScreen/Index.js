@@ -1,5 +1,5 @@
 import React from "react";
-import {init, draw, DrawVideoOnCanvas} from "../../lib/HTML5ChromaKey/chroma-demo";
+import {Trails} from "../../lib/HTML5ChromaKey/chroma-demo0";
 
 // Home page component
 // export default class Home extends React.Component {
@@ -15,8 +15,17 @@ import {init, draw, DrawVideoOnCanvas} from "../../lib/HTML5ChromaKey/chroma-dem
 
 export default class GreenScreen   extends React.Component {
   componentDidMount() {
-      console.log('initDraw');
-      init();
+      // init();
+      var trails = new Trails();
+      trails.draw();
+      // console.log(trails);
+      // if (window.requestAnimationFrame) window.requestAnimationFrame(trails.draw());
+      // IE implementation
+      // else if (window.msRequestAnimationFrame) window.msRequestAnimationFrame(this.draw);
+      // // Firefox implementation
+      // else if (window.mozRequestAnimationFrame) window.mozRequestAnimationFrame(this.draw);
+      // // Chrome implementation
+      // else if (window.webkitRequestAnimationFrame) window.webkitRequestAnimationFrame(this.draw);
   }
 
   render() {
@@ -55,7 +64,7 @@ export default class GreenScreen   extends React.Component {
           </div>
           <div id="source">
             <video style={{}} id="videodata" loop="loop" preload="auto" autoPlay="autoplay" width={600} height={400}>
-              
+
             </video>
           </div>
         </div>
