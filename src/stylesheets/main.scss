@@ -51,6 +51,13 @@ video {
   top: 20px;
 }
 
+#pixelSize {
+  position: absolute;
+  z-index: 3;
+  top: 20px;
+  width: 200px;
+}
+
 // #output {
 //   $elements: 33;
 //   @for $i from 0 to $elements {

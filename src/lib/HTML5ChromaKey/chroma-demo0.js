@@ -5,6 +5,7 @@ var Trails = class {
     this.selectedR = this.color[0];
     this.selectedG = this.color[1];
     this.selectedB = this.color[2];
+    this.pixelSize = 4;
     this.y = 0;
     this.x = 0;
     this.elCount = 0;
@@ -60,8 +61,8 @@ var Trails = class {
     this.container.appendChild(c);
 
     var options = {
-      pixelWidth: 4,
-      pixelHeight: 4
+      pixelWidth: this.pixelSize,
+      pixelHeight: this.pixelSize
     };
 
     this.imgDataNormal = ctx.getImageData(0, 0, c.width, c.height);
