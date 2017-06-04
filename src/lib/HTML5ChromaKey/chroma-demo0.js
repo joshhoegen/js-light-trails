@@ -1,11 +1,10 @@
-
-
 var Trails = class {
   constructor(color) {
     this.imgDataNormal;
-    this.selectedR = 36;
-    this.selectedG = 212;
-    this.selectedB = 123;
+    this.color = color || [36, 212, 123]
+    this.selectedR = this.color[0];
+    this.selectedG = this.color[1];
+    this.selectedB = this.color[2];
     this.y = 0;
     this.x = 0;
     this.elCount = 0;
@@ -55,20 +54,6 @@ var Trails = class {
     c.className = 'canvas_' + this.elCount;
     c.width = width;
     c.height = height;
-    // this.w = this.width/8;
-    // this.h = this.height/8;
-
-    // draw the original image at a fraction of the final size
-    // ctx.drawImage(video, 0, 0, w, h);
-
-    // turn off image aliasing
-    // ctx.msImageSmoothingEnabled = false;
-    // ctx.mozImageSmoothingEnabled = false;
-    // ctx.webkitImageSmoothingEnabled = false;
-    // ctx.imageSmoothingEnabled = false;
-
-    // enlarge the minimized image to full size
-    // ctx.drawImage(canvas, 0, 0, w, h, 0, 0, canvas.width, canvas.height);
 
     ctx.drawImage(this.video, 0, 0, c.width, c.height);
 
@@ -85,8 +70,8 @@ var Trails = class {
     if (this.elCount > 1) {
       this.addGreenScreen(this.imgData, this.imgDataNormal);
     }
-    if (this.elCount > 21) {
-      canvasCount = document.getElementsByClassName('canvas_' + (this.elCount - 21));
+    if (this.elCount > 24) {
+      canvasCount = document.getElementsByClassName('canvas_' + (this.elCount - 24));
       while (canvasCount.length > 0) {
         canvasCount[0].parentNode.removeChild(canvasCount[0]);
       }
@@ -136,9 +121,13 @@ var Trails = class {
         // Add all of the pixels to this bin!
         pixelsInBin = 0;
         for (x = xBinStart; x < xBinEnd; x += 1) {
-          if( x >= xSize ){ continue; }
+          if (x >= xSize) {
+            continue;
+          }
           for (y = yBinStart; y < yBinEnd; y += 1) {
-            if( y >= ySize ){ continue; }
+            if (y >= ySize) {
+              continue;
+            }
             i = (xSize * y + x) * 4;
             red += srcPixels[i + 0];
             green += srcPixels[i + 1];
@@ -156,9 +145,13 @@ var Trails = class {
 
         // Draw this bin
         for (x = xBinStart; x < xBinEnd; x += 1) {
-          if( x >= xSize ){ continue; }
+          if (x >= xSize) {
+            continue;
+          }
           for (y = yBinStart; y < yBinEnd; y += 1) {
-            if( y >= ySize ){ continue; }
+            if (y >= ySize) {
+              continue;
+            }
             i = (xSize * y + x) * 4;
             dstPixels[i + 0] = red;
             dstPixels[i + 1] = green;
@@ -207,10 +200,10 @@ var Trails = class {
           imgData.data[(i + 2) - j] = b;
           imgData.data[(i + 3) - j] = a;
 
-          // imgData.data[((i + 0) * imgData.width) - j] = r;
-          // imgData.data[((i + 1) * imgData.width) - j] = g;
-          // imgData.data[((i + 2) * imgData.width) - j] = b;
-          // imgData.data[((i + 3) * imgData.width) - j] = a;
+          imgData.data[((i + 0) * imgData.width) - j] = r;
+          imgData.data[((i + 1) * imgData.width) - j] = g;
+          imgData.data[((i + 2) * imgData.width) - j] = b;
+          imgData.data[((i + 3) * imgData.width) - j] = a;
         }
       }
     }
@@ -224,8 +217,8 @@ var Trails = class {
     var context = canvas.getContext('2d');
 
     // generateThumbnail(height, width);
-    canvas.setAttribute('width', this.width);
-    canvas.setAttribute('height', this.height);
+    canvas.setAttribute('width', width);
+    canvas.setAttribute('height', height);
     if (canvas.getContext) {
 
       context.drawImage(this.video, 0, 0, width, height);

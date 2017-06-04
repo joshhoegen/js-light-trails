@@ -17,7 +17,7 @@ canvas {
   right: 0;
   width: 100%;
   height: 100%;
-  z-index: 1050;
+  z-index: 1;
 }
 video {
   display: none;
@@ -31,7 +31,7 @@ video {
   right: 0;
   width: 100%;
   height: 100%;
-  z-index: 1050;
+  z-index: 1;
 }
 #source {
   position: fixed;
@@ -41,7 +41,14 @@ video {
   right: 0;
   width: 100%;
   height: 100%;
-  z-index: 1049;
+  z-index: 1;
+}
+
+.color-picker {
+  z-index: 2;
+  position: absolute;
+  left: 20px;
+  top: 20px;
 }
 
 // #output {
