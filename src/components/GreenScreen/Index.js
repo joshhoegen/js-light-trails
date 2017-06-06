@@ -64,34 +64,35 @@ export default class GreenScreen   extends React.Component {
     // this.trails.color = arr;
   }
 
-  closeColor(colors) {
-    console.log(colors);
-  }
-
-  changePixels(event) {
-    // this.setState({size: event.target.value});
-    this.trails.pixelSize = event.target.value;
-  }
+  // closeColor(colors) {
+  //   console.log(colors);
+  // }
+  //
+  // changePixels(event) {
+  //   // this.setState({
+  //   //   size: event.target.value
+  //   // });
+  //   this.trails.pixelSize = event.target.value;
+  // }
 
   render() {
     // navbar navbar-fixed-top navbar-inverse
+    // <input
+    //   id="pixelSize"
+    //   type="range"
+    //   min="2" max="16"
+    //   value={this.state.size}
+    //   onChange={this.changePixels.bind(this)}
+    //   step="1"/>
     return (
       <div>
         <div className='' role='navigation'>
           <ColorPickerPanel
             onChange={this.changeColor.bind(this)}
-            onClose={this.closeColor.bind(this)}
             placement='topLeft'
             className='color-picker'>
             <span className='rc-color-picker-trigger'/>
           </ColorPickerPanel>
-          <input
-            id="pixelSize"
-            type="range"
-            min="2" max="16"
-            value={this.state.size}
-            onChange={this.changePixels.bind(this)}
-            step="1"/>
         </div>{/* /.navbar */}
         <div className='container'>
           <hr />
@@ -100,16 +101,17 @@ export default class GreenScreen   extends React.Component {
           </footer>
         </div>{/*/.container*/}
         <div id='wrapper'>
-          <div id='output'>
-            <canvas id='videoscreen'>
-              <p>Sorry your browser does not support HTML5</p>
-            </canvas>
-          </div>
           <div id='source'>
             <video style={{}} id='videodata' loop='loop' preload='auto' autoPlay='autoplay' width={600} height={400}>
 
             </video>
           </div>
+          <div id='output'>
+            <canvas id='videoscreen'>
+              <p>Sorry your browser does not support HTML5</p>
+            </canvas>
+          </div>
+
         </div>
       </div>
     );
