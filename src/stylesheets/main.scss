@@ -20,7 +20,19 @@ canvas {
   z-index: 1;
 }
 video {
-  display: none;
+  // display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  // width: auto;
+  // height: auto;
+  z-index: 0;
+  object-fit: fill;
+  // background-size: cover;
 }
 #videoscreen {
   // display: none;
@@ -49,6 +61,13 @@ video {
   position: absolute;
   left: 20px;
   top: 20px;
+}
+
+#pixelSize {
+  position: absolute;
+  z-index: 3;
+  top: 20px;
+  width: 200px;
 }
 
 // #output {

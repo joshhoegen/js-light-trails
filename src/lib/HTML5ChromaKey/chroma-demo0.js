@@ -1,16 +1,16 @@
 var Trails = class {
   constructor(color) {
     this.imgDataNormal;
-    this.color = color || [36, 212, 123]
+    this.color = color || [42, 176, 80] // 140, 67, 67
     this.selectedR = this.color[0];
     this.selectedG = this.color[1];
     this.selectedB = this.color[2];
-    this.y = 0;
-    this.x = 0;
+    this.pixelSize = 4;
     this.elCount = 0;
     var video = document.getElementById('videodata');
     this.video = video;
-    this.canvas = document.getElementById('videoscreen');
+    this.width = video.width;
+    this.height = video.height;
     this.c = document.createElement('canvas');
     this.container = document.getElementById('output');
     this.container.appendChild(this.c);
@@ -28,7 +28,6 @@ var Trails = class {
   }
 
   draw() {
-    var _this = this;
     // console.log(this);
     if (window.requestAnimationFrame) {
       window.requestAnimationFrame(this.draw.bind(this));
@@ -57,11 +56,9 @@ var Trails = class {
 
     ctx.drawImage(this.video, 0, 0, c.width, c.height);
 
-    this.container.appendChild(c);
-
     var options = {
-      pixelWidth: 4,
-      pixelHeight: 4
+      pixelWidth: this.pixelSize,
+      pixelHeight: this.pixelSize
     };
 
     this.imgDataNormal = ctx.getImageData(0, 0, c.width, c.height);
@@ -70,18 +67,21 @@ var Trails = class {
     if (this.elCount > 1) {
       this.addGreenScreen(this.imgData, this.imgDataNormal);
     }
-    if (this.elCount > 24) {
-      canvasCount = document.getElementsByClassName('canvas_' + (this.elCount - 24));
+
+    if (this.elCount > 11) {
+      canvasCount = document.getElementsByClassName('canvas_' + (this.elCount - 11));
       while (canvasCount.length > 0) {
         canvasCount[0].parentNode.removeChild(canvasCount[0]);
       }
     }
 
-    this.elCount++;
-
     this.pixelate(this.imgData, this.imgData, options);
 
     ctx.putImageData(this.imgData, 0, 0);
+
+    this.container.appendChild(c);
+
+    this.elCount++;
 
   }
 
@@ -194,42 +194,23 @@ var Trails = class {
         imgData.data[i + 2] = b;
         imgData.data[i + 3] = a;
 
-        for (j = 0; j < 44; j += 4) {
-          imgData.data[(i + 0) - j] = r;
-          imgData.data[(i + 1) - j] = g;
-          imgData.data[(i + 2) - j] = b;
-          imgData.data[(i + 3) - j] = a;
-
-          imgData.data[((i + 0) * imgData.width) - j] = r;
-          imgData.data[((i + 1) * imgData.width) - j] = g;
-          imgData.data[((i + 2) * imgData.width) - j] = b;
-          imgData.data[((i + 3) * imgData.width) - j] = a;
-        }
+        // for (j = 0; j < 44; j += 4) {
+        //   imgData.data[(i + 0) - j] = r;
+        //   imgData.data[(i + 1) - j] = g;
+        //   imgData.data[(i + 2) - j] = b;
+        //   imgData.data[(i + 3) - j] = a;
+        //
+        //   imgData.data[((i + 0) * imgData.width) - j] = r;
+        //   imgData.data[((i + 1) * imgData.width) - j] = g;
+        //   imgData.data[((i + 2) * imgData.width) - j] = b;
+        //   imgData.data[((i + 3) * imgData.width) - j] = a;
+        // }
       }
     }
   }
 
   drawVideoOnCanvas() {
-    var video = this.video;
-    var width = video.width;
-    var height = video.height;
-    var canvas = this.canvas;
-    var context = canvas.getContext('2d');
-
-    // generateThumbnail(height, width);
-    canvas.setAttribute('width', width);
-    canvas.setAttribute('height', height);
-    if (canvas.getContext) {
-
-      context.drawImage(this.video, 0, 0, width, height);
-
-      this.imgDataNormal = context.getImageData(0, 0, width, height);
-      this.imgData = context.createImageData(width, height);
-
-      // addGreenScreen(imgData, imgDataNormal);
-      // context.putImageData(imgData, 0, 0);
-      this.generateThumbnail(height, width);
-    }
+    this.generateThumbnail(this.height, this.width);
   }
 };
 

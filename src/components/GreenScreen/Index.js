@@ -20,6 +20,9 @@ import 'rc-color-picker/assets/index.css';
 export default class GreenScreen   extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      size: 4
+    }
     // this.hexToRgbA = this.hexToRgbA.bind(this);
   }
 
@@ -50,7 +53,7 @@ export default class GreenScreen   extends React.Component {
     throw new Error('Bad Hex');
   }
 
-  changeHandler(colors) {
+  changeColor(colors) {
     var arr = this.hexToRgbA(colors.color);
 
     this.trails.selectedR = arr[0];
@@ -61,21 +64,33 @@ export default class GreenScreen   extends React.Component {
     // this.trails.color = arr;
   }
 
-  closeHandler(colors) {
-    console.log(colors);
-  }
+  // closeColor(colors) {
+  //   console.log(colors);
+  // }
+  //
+  // changePixels(event) {
+  //   // this.setState({
+  //   //   size: event.target.value
+  //   // });
+  //   this.trails.pixelSize = event.target.value;
+  // }
 
   render() {
     // navbar navbar-fixed-top navbar-inverse
+    // <input
+    //   id="pixelSize"
+    //   type="range"
+    //   min="2" max="16"
+    //   value={this.state.size}
+    //   onChange={this.changePixels.bind(this)}
+    //   step="1"/>
     return (
       <div>
         <div className='' role='navigation'>
           <ColorPickerPanel
-            onChange={this.changeHandler.bind(this)}
-            onClose={this.closeHandler}
+            onChange={this.changeColor.bind(this)}
             placement='topLeft'
-            className='color-picker'
-          >
+            className='color-picker'>
             <span className='rc-color-picker-trigger'/>
           </ColorPickerPanel>
         </div>{/* /.navbar */}
@@ -86,16 +101,17 @@ export default class GreenScreen   extends React.Component {
           </footer>
         </div>{/*/.container*/}
         <div id='wrapper'>
-          <div id='output'>
-            <canvas id='videoscreen'>
-              <p>Sorry your browser does not support HTML5</p>
-            </canvas>
-          </div>
           <div id='source'>
             <video style={{}} id='videodata' loop='loop' preload='auto' autoPlay='autoplay' width={600} height={400}>
 
             </video>
           </div>
+          <div id='output'>
+            <canvas id='videoscreen'>
+              <p>Sorry your browser does not support HTML5</p>
+            </canvas>
+          </div>
+
         </div>
       </div>
     );
