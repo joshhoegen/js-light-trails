@@ -1,12 +1,13 @@
 var Trails = class {
-  constructor(color) {
+  constructor(color, size) {
     this.imgDataNormal;
-    this.color = color || [42, 176, 80] // 140, 67, 67
+    this.color = color || [42, 176, 80];
     this.selectedR = this.color[0];
     this.selectedG = this.color[1];
     this.selectedB = this.color[2];
     this.pixelSize = 4;
     this.elCount = 0;
+    this.elMax = 11;
     var video = document.getElementById('videodata');
     this.video = video;
     this.width = video.width;
@@ -23,7 +24,6 @@ var Trails = class {
         video.src = window.URL.createObjectURL(stream);
         video.play();
       });
-      // this.draw();
     }
   }
 
@@ -42,24 +42,20 @@ var Trails = class {
     // else
     // setTimeout(draw, 600);
 
-    this.drawVideoOnCanvas();
+    this.generateThumbnail(this.height, this.width);
   }
 
   generateThumbnail(height, width) {
     var c = document.createElement('canvas');
     var ctx = c.getContext('2d');
     var canvasCount;
+    var i;
 
-    c.className = 'canvas_' + this.elCount;
+    c.className = 'canvas-trails canvas_' + this.elCount;
     c.width = width;
     c.height = height;
 
     ctx.drawImage(this.video, 0, 0, c.width, c.height);
-
-    var options = {
-      pixelWidth: this.pixelSize,
-      pixelHeight: this.pixelSize
-    };
 
     this.imgDataNormal = ctx.getImageData(0, 0, c.width, c.height);
     this.imgData = ctx.createImageData(c.width, c.height);
@@ -70,12 +66,10 @@ var Trails = class {
 
     if (this.elCount > 11) {
       canvasCount = document.getElementsByClassName('canvas_' + (this.elCount - 11));
-      while (canvasCount.length > 0) {
-        canvasCount[0].parentNode.removeChild(canvasCount[0]);
-      }
+      canvasCount[0].parentNode.removeChild(canvasCount[0]);
     }
 
-    this.pixelate(this.imgData, this.imgData, options);
+    this.pixelate(this.imgData, this.imgData);
 
     ctx.putImageData(this.imgData, 0, 0);
 
@@ -85,10 +79,10 @@ var Trails = class {
 
   }
 
-  pixelate(src, dst, opt) {
+  pixelate(src, dst) {
 
-    var xBinSize = opt.pixelWidth || 8,
-      yBinSize = opt.pixelHeight || 8;
+    var xBinSize = this.pixelSize,
+      yBinSize = this.pixelSize;
 
     var xSize = src.width,
       ySize = src.height,
@@ -194,6 +188,7 @@ var Trails = class {
         imgData.data[i + 2] = b;
         imgData.data[i + 3] = a;
 
+        // Add to own method for extraDistortion()
         // for (j = 0; j < 44; j += 4) {
         //   imgData.data[(i + 0) - j] = r;
         //   imgData.data[(i + 1) - j] = g;
@@ -207,10 +202,6 @@ var Trails = class {
         // }
       }
     }
-  }
-
-  drawVideoOnCanvas() {
-    this.generateThumbnail(this.height, this.width);
   }
 };
 

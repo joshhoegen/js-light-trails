@@ -5,30 +5,26 @@ import ColorPickerPanel from 'rc-color-picker';
 
 import 'rc-color-picker/assets/index.css';
 
-// Home page component
-// export default class Home extends React.Component {
-//   // render
-//   render() {
-//     return (
-//       <div className='page-home'>
-//         <h4>Hello world!</h4>
-//       </div>
-//     );
-//   }
-// }
-
-export default class GreenScreen   extends React.Component {
+export default class GreenScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      size: 4
+
+    var isHex  = /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(this.props.hex)
+    var hex = isHex == true ? this.props.hex : '#2ab050';
+    var prefix = '#';
+
+    if (hex.substr(0, prefix.length) !== prefix) {
+        hex = prefix + hex;
     }
-    // this.hexToRgbA = this.hexToRgbA.bind(this);
+
+    this.state = {
+      size: 4,
+      color: hex
+    }
   }
 
   componentDidMount() {
-      // init();
-      this.trails = new Trails();
+      this.trails = new Trails(this.hexToRgbA(this.state.color));
       this.trails.draw();
       // console.log(trails);
       // if (window.requestAnimationFrame) window.requestAnimationFrame(trails.draw());
@@ -60,46 +56,40 @@ export default class GreenScreen   extends React.Component {
     this.trails.selectedG = arr[1];
     this.trails.selectedB = arr[2];
 
-    // console.log(arr);
-    // this.trails.color = arr;
   }
 
-  // closeColor(colors) {
-  //   console.log(colors);
-  // }
-  //
-  // changePixels(event) {
-  //   // this.setState({
-  //   //   size: event.target.value
-  //   // });
-  //   this.trails.pixelSize = event.target.value;
-  // }
+  changeSize(event) {
+    console.log(event.target.value);
+    this.setState({
+      size: event.target.value
+    });
+  }
+
+  changePixels() {
+
+    // this.trails.pixelSize = this.state.size;
+  }
 
   render() {
-    // navbar navbar-fixed-top navbar-inverse
     // <input
     //   id="pixelSize"
     //   type="range"
-    //   min="2" max="16"
-    //   value={this.state.size}
-    //   onChange={this.changePixels.bind(this)}
-    //   step="1"/>
+    //   min="0" max="16"
+    //   defaultValue={this.state.size}
+    //   step="2"
+    //   onChange={this.changeSize.bind(this)}
+    //   onMouseUp={this.changePixels.bind(this)} />
     return (
       <div>
-        <div className='' role='navigation'>
+        <div className='controls' role='navigation'>
           <ColorPickerPanel
+            defaultColor={this.state.color}
             onChange={this.changeColor.bind(this)}
             placement='topLeft'
             className='color-picker'>
             <span className='rc-color-picker-trigger'/>
           </ColorPickerPanel>
         </div>{/* /.navbar */}
-        <div className='container'>
-          <hr />
-          <footer>
-            <p>© Company 2013</p>
-          </footer>
-        </div>{/*/.container*/}
         <div id='wrapper'>
           <div id='source'>
             <video style={{}} id='videodata' loop='loop' preload='auto' autoPlay='autoplay' width={600} height={400}>
