@@ -12,9 +12,12 @@ var Trails = class {
     this.video = video;
     this.width = video.width;
     this.height = video.height;
+    this.imgDataLength = this.width * this.height * 4;
     this.c = document.createElement('canvas');
+    this.ctx = this.c.getContext('2d');
     this.container = document.getElementById('output');
     this.container.appendChild(this.c);
+    this.animationFrame;
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       // Not adding `{ audio: true }` since we only want video now
@@ -28,28 +31,23 @@ var Trails = class {
   }
 
   draw() {
-    // console.log(this);
-    if (window.requestAnimationFrame) {
-      window.requestAnimationFrame(this.draw.bind(this));
-    }
-    // IE implementation
-    // else if (window.msRequestAnimationFrame) window.msRequestAnimationFrame(this.draw);
-    // // Firefox implementation
-    // else if (window.mozRequestAnimationFrame) window.mozRequestAnimationFrame(this.draw);
-    // // Chrome implementation
-    // else if (window.webkitRequestAnimationFrame) window.webkitRequestAnimationFrame(this.draw);
-    // Other browsers that do not yet support feature
-    // else
-    // setTimeout(draw, 600);
-
+    this.amimationFrame = window.requestAnimationFrame(this.draw.bind(this));
     this.generateThumbnail(this.height, this.width);
   }
+
+  stopDraw() {
+    if (this.amimationFrame) {
+      window.cancelAnimationFrame(this.amimationFrame);
+      this.amimationFrame = undefined;
+    }
+  }
+
+  // precreate 11 canvases, then just iterate through each adding and removing image
 
   generateThumbnail(height, width) {
     var c = document.createElement('canvas');
     var ctx = c.getContext('2d');
     var canvasCount;
-    var i;
 
     c.className = 'canvas-trails canvas_' + this.elCount;
     c.width = width;
@@ -57,19 +55,17 @@ var Trails = class {
 
     ctx.drawImage(this.video, 0, 0, c.width, c.height);
 
-    this.imgDataNormal = ctx.getImageData(0, 0, c.width, c.height);
-    this.imgData = ctx.createImageData(c.width, c.height);
+    this.imgDataNormal = ctx.getImageData(0, 0, width, height);
+    this.imgData = ctx.createImageData(width, height);
 
-    if (this.elCount > 1) {
-      this.addGreenScreen(this.imgData, this.imgDataNormal);
-    }
+    this.addGreenScreen(this.imgData, this.imgDataNormal, width, height);
 
     if (this.elCount > 11) {
       canvasCount = document.getElementsByClassName('canvas_' + (this.elCount - 11));
       canvasCount[0].parentNode.removeChild(canvasCount[0]);
     }
 
-    this.pixelate(this.imgData, this.imgData);
+    this.pixelate(this.imgData, this.imgData, this.pixelSize);
 
     ctx.putImageData(this.imgData, 0, 0);
 
@@ -79,10 +75,59 @@ var Trails = class {
 
   }
 
-  pixelate(src, dst) {
+  addGreenScreen(imgData, imgDataNormal, width, height) {
+    var i;
+    var r = 0;
+    var g = 0;
+    var b = 0;
+    var a = 0;
+    var j;
+    for (i = this.imgDataLength; i-=4;) {
+    // for (i = 0; i < this.imgDataLength; i += 4) {
+    // while(this.imgDataLength-=4) {
+      r = imgDataNormal.data[i + 0];
+      g = imgDataNormal.data[i + 1];
+      b = imgDataNormal.data[i + 2];
+      a = imgDataNormal.data[i + 3];
 
-    var xBinSize = this.pixelSize,
-      yBinSize = this.pixelSize;
+      // if (r != selectedR && g != selectedG && b != selectedB) {
+      if (r < this.selectedR - 80 || r > this.selectedR + 80) {
+        a = 0;
+      }
+      if (g < this.selectedG - 80 || g > this.selectedG + 80) {
+        a = 0;
+      }
+      if (b < this.selectedB - 80 || b > this.selectedB + 80) { // if b < 43 or b > 183
+        a = 0;
+      }
+
+
+      if (a != 0) {
+        imgData.data[i + 0] = r;
+        imgData.data[i + 1] = g;
+        imgData.data[i + 2] = b;
+        imgData.data[i + 3] = a;
+
+        // Add to own method for extraDistortion()
+        // for (j = 0; j < 44; j += 4) {
+        //   imgData.data[(i + 0) - j] = r;
+        //   imgData.data[(i + 1) - j] = g;
+        //   imgData.data[(i + 2) - j] = b;
+        //   imgData.data[(i + 3) - j] = a;
+        //
+        //   imgData.data[((i + 0) * imgData.width) - j] = r;
+        //   imgData.data[((i + 1) * imgData.width) - j] = g;
+        //   imgData.data[((i + 2) * imgData.width) - j] = b;
+        //   imgData.data[((i + 3) * imgData.width) - j] = a;
+        // }
+      }
+    }
+  }
+
+  pixelate(src, dst, pixelSize) {
+
+    var xBinSize = pixelSize,
+      yBinSize = pixelSize;
 
     var xSize = src.width,
       ySize = src.height,
@@ -153,53 +198,6 @@ var Trails = class {
             dstPixels[i + 3] = alpha;
           }
         }
-      }
-    }
-  }
-
-  addGreenScreen(imgData, imgDataNormal) {
-    var i;
-    var r = 0;
-    var g = 0;
-    var b = 0;
-    var a = 0;
-    var j;
-    for (i = 0; i < imgData.width * imgData.height * 4; i += 4) {
-      r = imgDataNormal.data[i + 0];
-      g = imgDataNormal.data[i + 1];
-      b = imgDataNormal.data[i + 2];
-      a = imgDataNormal.data[i + 3];
-
-      // if (r != selectedR && g != selectedG && b != selectedB) {
-      if (r < this.selectedR - 80 || r > this.selectedR + 80) {
-        a = 0;
-      }
-      if (g < this.selectedG - 80 || g > this.selectedG + 80) {
-        a = 0;
-      }
-      if (b < this.selectedB - 80 || b > this.selectedB + 80) { // if b < 43 or b > 183
-        a = 0;
-      }
-
-
-      if (a != 0) {
-        imgData.data[i + 0] = r;
-        imgData.data[i + 1] = g;
-        imgData.data[i + 2] = b;
-        imgData.data[i + 3] = a;
-
-        // Add to own method for extraDistortion()
-        // for (j = 0; j < 44; j += 4) {
-        //   imgData.data[(i + 0) - j] = r;
-        //   imgData.data[(i + 1) - j] = g;
-        //   imgData.data[(i + 2) - j] = b;
-        //   imgData.data[(i + 3) - j] = a;
-        //
-        //   imgData.data[((i + 0) * imgData.width) - j] = r;
-        //   imgData.data[((i + 1) * imgData.width) - j] = g;
-        //   imgData.data[((i + 2) * imgData.width) - j] = b;
-        //   imgData.data[((i + 3) * imgData.width) - j] = a;
-        // }
       }
     }
   }

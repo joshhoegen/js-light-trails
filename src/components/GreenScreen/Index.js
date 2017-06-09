@@ -66,19 +66,12 @@ export default class GreenScreen extends React.Component {
   }
 
   changePixels() {
-
+    this.trails.stopDraw();
     // this.trails.pixelSize = this.state.size;
+    // this.trails.draw();
   }
 
   render() {
-    // <input
-    //   id="pixelSize"
-    //   type="range"
-    //   min="0" max="16"
-    //   defaultValue={this.state.size}
-    //   step="2"
-    //   onChange={this.changeSize.bind(this)}
-    //   onMouseUp={this.changePixels.bind(this)} />
     return (
       <div>
         <div className='controls' role='navigation'>
@@ -89,6 +82,14 @@ export default class GreenScreen extends React.Component {
             className='color-picker'>
             <span className='rc-color-picker-trigger'/>
           </ColorPickerPanel>
+          <input
+            id="pixelSize"
+            type="range"
+            min="0" max="16"
+            defaultValue={this.state.size}
+            step="2"
+            onChange={this.changeSize.bind(this)}
+            onMouseUp={this.changePixels.bind(this)} />
         </div>{/* /.navbar */}
         <div id='wrapper'>
           <div id='source'>
