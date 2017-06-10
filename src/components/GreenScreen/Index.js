@@ -60,11 +60,16 @@ export default class GreenScreen extends React.Component {
   }
 
   changeSize(event) {
+    var size = event.target.value;
     this.trails.stopDraw();
-    this.setState({
-      size: event.target.value
+    this.trails.pixelSize = size;
+    this.setState(function(currentState) {
+      this.changePixels();
+      return {
+        size: size
+      }
     });
-    this.trails.pixelSize = this.state.size;
+
   }
 
   togglePixel(event) {
@@ -100,11 +105,10 @@ export default class GreenScreen extends React.Component {
             id='pixelSize'
             name='pixelSize'
             type='range'
-            min='0' max='16'
+            min='0' max='12'
             defaultValue={this.state.pixelate}
             step='2'
-            onChange={this.changeSize.bind(this)}
-            onMouseUp={this.changePixels.bind(this)} />
+            onChange={this.changeSize.bind(this)} />
           <label>Pixelate</label><input
             id='pixelate'
             name='pixelate'
