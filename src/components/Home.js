@@ -1,17 +1,16 @@
-import React from "react";
-import GreenScreen from "./GreenScreen/index";
+import React from 'react';
+import GreenScreen from './trails/index';
 
 export default class Home extends React.Component {
-  componentWillMount(){
+  componentWillMount() {
     this.query = this.props.location.query;
   }
 
   render() {
-    var query = this.query;
-    console.log(query);
+    const query = this.query;
     return (
       <div className="page-home">
-        <GreenScreen hex={query.hex || "2ab050"} />
+        <GreenScreen hex={query.hex || '2ab050'} />
       </div>
     );
   }
