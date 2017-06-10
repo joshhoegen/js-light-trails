@@ -1,5 +1,7 @@
-var Trails = class {
+const Trails = class {
   constructor(color, size) {
+    const self = this;
+    const video = document.getElementById('videodata');
     this.imgDataNormal;
     this.color = color || [42, 176, 80];
     this.selectedR = this.color[0];
@@ -8,7 +10,6 @@ var Trails = class {
     this.pixelSize = 4;
     this.elCount = 0;
     this.elMax = 11;
-    var video = document.getElementById('videodata');
     this.video = video;
     this.width = video.width;
     this.height = video.height;
@@ -18,19 +19,18 @@ var Trails = class {
     this.ctx = [];
     this.container = document.getElementById('output');
     this.animationFrame;
-    var self = this;
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       // Not adding `{ audio: true }` since we only want video now
       navigator.mediaDevices.getUserMedia({
         video: true
-      }).then(function(stream) {
+      }).then(stream => {
         video.src = window.URL.createObjectURL(stream);
         video.play();
-        var i = self.elMax;
+        let i = self.elMax;
         while (i--) {
           self.c[i] = document.createElement('canvas');
-          self.c[i].id = 'canvas_' + i;
+          self.c[i].id = `canvas_${i}`;
           self.ctx[i] = self.c[i].getContext('2d');
           self.container.appendChild(self.c[i]);
         }
@@ -53,22 +53,19 @@ var Trails = class {
   }
 
   generateThumbnail2(height, width) {
-    var count = this.elCount;
+    const count = this.elCount;
 
+    // TODO: See if we can set this once. Initial attempts zoomed in.
     this.c[this.elCount].width = width;
     this.c[this.elCount].height = height;
 
     // Pixelate with out pixelate()
-    var size = this.pixelSize / 100,
-    w = width * size,
-    h = height * size;
+    const size = this.pixelSize / 100;
+    const w = width * size;
+    const h = height * size;
+    const ctx = this.ctx[this.elCount];
 
-    var ctx = this.ctx[this.elCount];
-
-
-    // MODE logic
     if (this.mode == 'pixelate') {
-      // console.log(self.ctx[i]);
       ctx.webkitImageSmoothingEnabled = false;
       ctx.imageSmoothingEnabled = false;
     }
@@ -91,25 +88,21 @@ var Trails = class {
     } else {
       this.elCount++;
     }
-
   }
 
   addGreenScreen(imgData, imgDataNormal, width, height) {
-    var i;
-    var r = 0;
-    var g = 0;
-    var b = 0;
-    var a = 0;
-    var j;
+    let i;
+    let r = 0;
+    let g = 0;
+    let b = 0;
+    let a = 0;
+    let j;
     for (i = this.imgDataLength; i-=4;) {
-    // for (i = 0; i < this.imgDataLength; i += 4) {
-    // while(this.imgDataLength-=4) {
       r = imgDataNormal.data[i + 0];
       g = imgDataNormal.data[i + 1];
       b = imgDataNormal.data[i + 2];
       a = imgDataNormal.data[i + 3];
 
-      // if (r != selectedR && g != selectedG && b != selectedB) {
       if (r < this.selectedR - 80 || r > this.selectedR + 80) {
         a = 0;
       }
@@ -119,15 +112,13 @@ var Trails = class {
       if (b < this.selectedB - 80 || b > this.selectedB + 80) { // if b < 43 or b > 183
         a = 0;
       }
-
-
       if (a != 0) {
         imgData.data[i + 0] = r;
         imgData.data[i + 1] = g;
         imgData.data[i + 2] = b;
         imgData.data[i + 3] = a;
 
-        // Add to own method for extraDistortion()
+        // TODO: Add to own method for extraHorizontalDistortion()
         // for (j = 0; j < 44; j += 4) {
         //   imgData.data[(i + 0) - j] = r;
         //   imgData.data[(i + 1) - j] = g;
@@ -143,7 +134,6 @@ var Trails = class {
     }
   }
 };
-
 
 export {
   Trails

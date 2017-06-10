@@ -67,10 +67,28 @@ video {
 }
 
 .controls {
+  display: table;
   z-index: 2;
   position: fixed;
-  left: 20px;
-  top: 20px;
+  padding: 20px;
+  left: 0px;
+  top: 0px;
+  min-width: 30%;
+  min-height: 40px;
+  .controls-wrapper {
+    display: table-cell;
+    vertical-align: middle;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 1s, opacity 0.5s ease-in-out;
+  }
+  &:hover {
+   .controls-wrapper {
+     visibility: visible;
+     opacity: 1;
+     transition: visibility 0s, opacity 0.5s ease-in-out;
+   }
+  }
   label {
     float: left;
     color: #fff;
