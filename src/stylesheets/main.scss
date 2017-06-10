@@ -22,7 +22,7 @@ canvas {
   -webkit-transform: scale(-1, 1);
   -o-transform: scale(-1, 1);
   transform: scale(-1, 1);
-  filter: FlipH;
+  filter:FlipH;
 }
 video {
   // display: none;
@@ -41,7 +41,7 @@ video {
   -webkit-transform: scale(-1, 1);
   -o-transform: scale(-1, 1);
   transform: scale(-1, 1);
-  filter: FlipH;
+  filter:FlipH;
   // background-size: cover;
 }
 #videoscreen {
@@ -65,14 +65,13 @@ video {
   height: 100%;
   z-index: 1;
 }
-
 .controls {
   display: table;
   z-index: 2;
   position: fixed;
   padding: 20px;
-  left: 0px;
-  top: 0px;
+  left: 0;
+  top: 0;
   min-width: 30%;
   min-height: 40px;
   .controls-wrapper {
@@ -83,11 +82,11 @@ video {
     transition: visibility 1s, opacity 0.5s ease-in-out;
   }
   &:hover {
-   .controls-wrapper {
-     visibility: visible;
-     opacity: 1;
-     transition: visibility 0s, opacity 0.5s ease-in-out;
-   }
+    .controls-wrapper {
+      visibility: visible;
+      opacity: 1;
+      transition: visibility 0s, opacity 0.5s ease-in-out;
+    }
   }
   label {
     float: left;
@@ -104,20 +103,26 @@ video {
     direction: rtl;
   }
 }
-
 .color-picker {
   float: left;
   margin-right: 20px;
 }
-
-
-
-
-// #output {
-//   $elements: 33;
-//   @for $i from 0 to $elements {
-//     canvas:nth-child(#{$i}) {
-//        opacity: $i * 3;
-//     }
-//   }
-// }
+.alert {
+  z-index: 4;
+  position: absolute;
+  right: 0;
+  visibility: visible;
+  opacity: 0.7;
+  background: #CCC;
+  text-align: center;
+  color: #000;
+  border: #000;
+  border-radius: 0;
+  animation: fadeOutAlert 2s ease-in 4s forwards;
+}
+@keyframes fadeOutAlert {
+  to {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
