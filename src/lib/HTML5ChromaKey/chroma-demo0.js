@@ -5,7 +5,7 @@ var Trails = class {
     this.selectedR = this.color[0];
     this.selectedG = this.color[1];
     this.selectedB = this.color[2];
-    this.pixelSize = 4;
+    this.pixelSize = 2;
     this.elCount = 0;
     this.elMax = 11;
     var video = document.getElementById('videodata');
@@ -13,11 +13,11 @@ var Trails = class {
     this.width = video.width;
     this.height = video.height;
     this.imgDataLength = this.width * this.height * 4;
-    this.c = document.createElement('canvas');
-    this.ctx = this.c.getContext('2d');
+    this.c = [];
+    this.ctx = [];
     this.container = document.getElementById('output');
-    this.container.appendChild(this.c);
     this.animationFrame;
+    var self = this;
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       // Not adding `{ audio: true }` since we only want video now
@@ -26,13 +26,23 @@ var Trails = class {
       }).then(function(stream) {
         video.src = window.URL.createObjectURL(stream);
         video.play();
+        var i = self.elMax;
+        while (i--) {
+          self.c[i] = document.createElement('canvas');
+          self.c[i].id = 'canvas_' + i;
+          self.ctx[i] = self.c[i].getContext('2d');
+          self.container.appendChild(self.c[i]);
+          // console.log(self.ctx[i]);
+        }
       });
     }
   }
 
   draw() {
     this.amimationFrame = window.requestAnimationFrame(this.draw.bind(this));
-    this.generateThumbnail(this.height, this.width);
+    if (this.c.length > 9 && this.ctx.length > 9) {
+      this.generateThumbnail2(this.height, this.width);
+    }
   }
 
   stopDraw() {
@@ -42,38 +52,70 @@ var Trails = class {
     }
   }
 
-  // precreate 11 canvases, then just iterate through each adding and removing image
+  generateThumbnail2(height, width) {
+    var count = this.elCount;
 
-  generateThumbnail(height, width) {
-    var c = document.createElement('canvas');
-    var ctx = c.getContext('2d');
-    var canvasCount;
+    this.c[this.elCount].width = width;
+    this.c[this.elCount].height = height;
 
-    c.className = 'canvas-trails canvas_' + this.elCount;
-    c.width = width;
-    c.height = height;
+    // var size = this.pixelSize / 100,
+    // w = width * size,
+    // h = height * size;
+    //
+    // // draw the original image at a fraction of the final size
+    // this.ctx[this.elCount].drawImage(this.video, 0, 0, w, h);
 
-    ctx.drawImage(this.video, 0, 0, c.width, c.height);
+    var ctx = this.ctx[this.elCount];
+
+    this.ctx[this.elCount].drawImage(this.video, 0, 0, width, height);
 
     this.imgDataNormal = ctx.getImageData(0, 0, width, height);
     this.imgData = ctx.createImageData(width, height);
-
     this.addGreenScreen(this.imgData, this.imgDataNormal, width, height);
 
-    if (this.elCount > 11) {
-      canvasCount = document.getElementsByClassName('canvas_' + (this.elCount - 11));
-      canvasCount[0].parentNode.removeChild(canvasCount[0]);
-    }
-
-    this.pixelate(this.imgData, this.imgData, this.pixelSize);
-
+    // this.pixelate(this.imgData, this.imgData, this.pixelSize);
     ctx.putImageData(this.imgData, 0, 0);
 
-    this.container.appendChild(c);
-
-    this.elCount++;
+    if (this.elCount > 9) {
+      this.elCount = 0;
+    } else {
+      this.elCount++;
+    }
 
   }
+
+  // precreate 11 canvases, then just iterate through each adding and removing image
+
+  // generateThumbnail(height, width) {
+  //   var c = document.createElement('canvas');
+  //   var ctx = c.getContext('2d');
+  //   var canvasCount;
+  //
+  //   c.className = 'canvas-trails canvas_' + this.elCount;
+  //   c.width = width;
+  //   c.height = height;
+  //
+  //   ctx.drawImage(this.video, 0, 0, c.width, c.height);
+  //
+  //   this.imgDataNormal = ctx.getImageData(0, 0, width, height);
+  //   this.imgData = ctx.createImageData(width, height);
+  //
+  //   this.addGreenScreen(this.imgData, this.imgDataNormal, width, height);
+  //
+  //   if (this.elCount > 11) {
+  //     canvasCount = document.getElementsByClassName('canvas_' + (this.elCount - 11));
+  //     canvasCount[0].parentNode.removeChild(canvasCount[0]);
+  //   }
+  //
+  //   this.pixelate(this.imgData, this.imgData, this.pixelSize);
+  //
+  //   ctx.putImageData(this.imgData, 0, 0);
+  //
+  //   this.container.appendChild(c);
+  //
+  //   this.elCount++;
+  //
+  // }
 
   addGreenScreen(imgData, imgDataNormal, width, height) {
     var i;
