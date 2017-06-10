@@ -1,3 +1,4 @@
+// TODO: Fix no-no disables below.
 module.exports = {
     "env": {
       "browser": true
