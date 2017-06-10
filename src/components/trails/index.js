@@ -2,7 +2,7 @@ import React from 'react';
 import ColorPickerPanel from 'rc-color-picker';
 import 'rc-color-picker/assets/index.css';
 // import ReactDOM from 'react-dom';
-import { Trails } from '../../lib/HTML5ChromaKey/Trails';
+import { Trails } from '../../lib/video-trails/Trails';
 
 
 export default class GreenScreen extends React.Component {
@@ -84,6 +84,11 @@ export default class GreenScreen extends React.Component {
   render() {
     return (
       <div>
+        <div className="alert alert-success" role="alert">
+          <span className="glyphicon glyphicon-arrow-left" />&nbsp;
+          Hover over the left corner to expose controls. Default color is green (2AB050).
+          You can also choose color by appending "?hex=2AB050" in the address bar.
+        </div>
         <div className="controls" role="navigation">
           <div className="controls-wrapper">
             <ColorPickerPanel

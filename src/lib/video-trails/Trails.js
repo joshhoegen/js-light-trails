@@ -62,7 +62,6 @@ const Trails = class {
     this.c[count].width = width;
     this.c[count].height = height;
 
-    // Pixelate with out pixelate()
     const size = this.pixelSize / 100;
     const w = width * size;
     const h = height * size;
