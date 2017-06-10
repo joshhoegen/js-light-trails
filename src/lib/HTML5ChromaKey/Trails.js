@@ -1,5 +1,6 @@
 const Trails = class {
   constructor(color, size) {
+    // Since this is still an experiment, errrrthing is exposed.
     const self = this;
     const video = document.getElementById('videodata');
     this.color = color || [42, 176, 80];
@@ -56,7 +57,8 @@ const Trails = class {
   generateThumbnail2(height, width) {
     const count = this.elCount;
 
-    // TODO: See if we can set this once. Initial attempts zoomed in.
+    // TODO: See if we can set this once.
+    // Initial attempts had unexpected results.
     this.c[count].width = width;
     this.c[count].height = height;
 
@@ -97,6 +99,7 @@ const Trails = class {
     let g = 0;
     let b = 0;
     let a = 0;
+    // eslint disabled because this is faster: https://jsperf.com/for-vs-while/11
     for (i = this.imgDataLength; i -= 4;) { // eslint-disable-line no-cond-assign
       r = imgDataNormal.data[i + 0];
       g = imgDataNormal.data[i + 1];
@@ -109,7 +112,7 @@ const Trails = class {
       if (g < this.selectedG - 80 || g > this.selectedG + 80) {
         a = 0;
       }
-      if (b < this.selectedB - 80 || b > this.selectedB + 80) { // if b < 43 or b > 183
+      if (b < this.selectedB - 80 || b > this.selectedB + 80) {
         a = 0;
       }
       if (a !== 0) {
