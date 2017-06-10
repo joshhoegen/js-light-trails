@@ -19,6 +19,7 @@ export default class GreenScreen extends React.Component {
 
     this.state = {
       size: 4,
+      pixelate: false,
       color: hex
     }
   }
@@ -59,22 +60,35 @@ export default class GreenScreen extends React.Component {
   }
 
   changeSize(event) {
-    console.log(event.target.value);
+    this.trails.stopDraw();
     this.setState({
       size: event.target.value
     });
+    this.trails.pixelSize = this.state.size;
+  }
+
+  togglePixel(event) {
+    this.trails.stopDraw();
+    this.setState({
+      pixelate: event.target.checked
+    });
+    // TODO: Create Trails.pixelate instead of Trails.mode
+    if (event.target.checked == true) {
+      this.trails.mode = 'pixelate';
+    } else {
+      this.trails.mode = 'blur';
+    }
+    this.changePixels();
   }
 
   changePixels() {
-    this.trails.stopDraw();
-    // this.trails.pixelSize = this.state.size;
-    // this.trails.draw();
+    this.trails.draw();
   }
 
   render() {
     return (
       <div>
-        <div className='controls' role='navigation'>
+        <form className='controls' role='navigation'>
           <ColorPickerPanel
             defaultColor={this.state.color}
             onChange={this.changeColor.bind(this)}
@@ -82,15 +96,22 @@ export default class GreenScreen extends React.Component {
             className='color-picker'>
             <span className='rc-color-picker-trigger'/>
           </ColorPickerPanel>
-          <input
-            id="pixelSize"
-            type="range"
-            min="0" max="16"
-            defaultValue={this.state.size}
-            step="2"
+          <label>Size</label><input
+            id='pixelSize'
+            name='pixelSize'
+            type='range'
+            min='0' max='16'
+            defaultValue={this.state.pixelate}
+            step='2'
             onChange={this.changeSize.bind(this)}
             onMouseUp={this.changePixels.bind(this)} />
-        </div>{/* /.navbar */}
+          <label>Pixelate</label><input
+            id='pixelate'
+            name='pixelate'
+            type='checkbox'
+            onChange={this.togglePixel.bind(this)} />
+
+        </form>{/* /.navbar */}
         <div id='wrapper'>
           <div id='source'>
             <video style={{}} id='videodata' loop='loop' preload='auto' autoPlay='autoplay' width={600} height={400}>

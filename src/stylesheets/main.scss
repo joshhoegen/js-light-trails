@@ -68,14 +68,31 @@ video {
 
 .controls {
   z-index: 2;
-  position: absolute;
+  position: fixed;
   left: 20px;
   top: 20px;
+  label {
+    float: left;
+    color: #fff;
+    margin: 1px 2% 0 0;
+  }
+  input {
+    float: left;
+    margin: 5px 24px 0 0;
+  }
+  input#pixelSize {
+    max-width: 25%;
+    margin-top: 3px;
+    direction: rtl;
+  }
 }
 
 .color-picker {
-
+  float: left;
+  margin-right: 20px;
 }
+
+
 
 
 // #output {

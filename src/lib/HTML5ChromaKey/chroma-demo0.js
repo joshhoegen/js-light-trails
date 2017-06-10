@@ -5,7 +5,7 @@ var Trails = class {
     this.selectedR = this.color[0];
     this.selectedG = this.color[1];
     this.selectedB = this.color[2];
-    this.pixelSize = 2;
+    this.pixelSize = 4;
     this.elCount = 0;
     this.elMax = 11;
     var video = document.getElementById('videodata');
@@ -13,6 +13,7 @@ var Trails = class {
     this.width = video.width;
     this.height = video.height;
     this.imgDataLength = this.width * this.height * 4;
+    this.mode = 'blur';
     this.c = [];
     this.ctx = [];
     this.container = document.getElementById('output');
@@ -32,7 +33,6 @@ var Trails = class {
           self.c[i].id = 'canvas_' + i;
           self.ctx[i] = self.c[i].getContext('2d');
           self.container.appendChild(self.c[i]);
-          // console.log(self.ctx[i]);
         }
       });
     }
@@ -58,22 +58,32 @@ var Trails = class {
     this.c[this.elCount].width = width;
     this.c[this.elCount].height = height;
 
-    // var size = this.pixelSize / 100,
-    // w = width * size,
-    // h = height * size;
-    //
-    // // draw the original image at a fraction of the final size
-    // this.ctx[this.elCount].drawImage(this.video, 0, 0, w, h);
+    // Pixelate with out pixelate()
+    var size = this.pixelSize / 100,
+    w = width * size,
+    h = height * size;
 
     var ctx = this.ctx[this.elCount];
 
-    this.ctx[this.elCount].drawImage(this.video, 0, 0, width, height);
+
+    // MODE logic
+    if (this.mode == 'pixelate') {
+      // console.log(self.ctx[i]);
+      ctx.webkitImageSmoothingEnabled = false;
+      ctx.imageSmoothingEnabled = false;
+    }
+    if (this.mode == 'blur' || this.mode == 'pixelate') {
+      // draw the original image at a fraction of the final size
+      ctx.drawImage(this.video, 0, 0, w, h);
+      ctx.drawImage(this.c[this.elCount], 0, 0, w, h, 0, 0, width, height);
+    } else {
+      ctx.drawImage(this.video, 0, 0, width, height);
+    }
 
     this.imgDataNormal = ctx.getImageData(0, 0, width, height);
     this.imgData = ctx.createImageData(width, height);
     this.addGreenScreen(this.imgData, this.imgDataNormal, width, height);
 
-    // this.pixelate(this.imgData, this.imgData, this.pixelSize);
     ctx.putImageData(this.imgData, 0, 0);
 
     if (this.elCount > 9) {
@@ -83,39 +93,6 @@ var Trails = class {
     }
 
   }
-
-  // precreate 11 canvases, then just iterate through each adding and removing image
-
-  // generateThumbnail(height, width) {
-  //   var c = document.createElement('canvas');
-  //   var ctx = c.getContext('2d');
-  //   var canvasCount;
-  //
-  //   c.className = 'canvas-trails canvas_' + this.elCount;
-  //   c.width = width;
-  //   c.height = height;
-  //
-  //   ctx.drawImage(this.video, 0, 0, c.width, c.height);
-  //
-  //   this.imgDataNormal = ctx.getImageData(0, 0, width, height);
-  //   this.imgData = ctx.createImageData(width, height);
-  //
-  //   this.addGreenScreen(this.imgData, this.imgDataNormal, width, height);
-  //
-  //   if (this.elCount > 11) {
-  //     canvasCount = document.getElementsByClassName('canvas_' + (this.elCount - 11));
-  //     canvasCount[0].parentNode.removeChild(canvasCount[0]);
-  //   }
-  //
-  //   this.pixelate(this.imgData, this.imgData, this.pixelSize);
-  //
-  //   ctx.putImageData(this.imgData, 0, 0);
-  //
-  //   this.container.appendChild(c);
-  //
-  //   this.elCount++;
-  //
-  // }
 
   addGreenScreen(imgData, imgDataNormal, width, height) {
     var i;
@@ -162,84 +139,6 @@ var Trails = class {
         //   imgData.data[((i + 2) * imgData.width) - j] = b;
         //   imgData.data[((i + 3) * imgData.width) - j] = a;
         // }
-      }
-    }
-  }
-
-  pixelate(src, dst, pixelSize) {
-
-    var xBinSize = pixelSize,
-      yBinSize = pixelSize;
-
-    var xSize = src.width,
-      ySize = src.height,
-      srcPixels = src.data,
-      dstPixels = dst.data,
-      x, y, i;
-
-    var pixelsPerBin = xBinSize * yBinSize,
-      red, green, blue, alpha, alphas,
-      nBinsX = Math.ceil(xSize / xBinSize),
-      nBinsY = Math.ceil(ySize / yBinSize),
-      xBinStart, xBinEnd, yBinStart, yBinEnd,
-      xBin, yBin, pixelsInBin;
-
-    for (xBin = 0; xBin < nBinsX; xBin += 1) {
-      for (yBin = 0; yBin < nBinsY; yBin += 1) {
-
-        // Initialize the color accumlators to 0
-        red = 0;
-        green = 0;
-        blue = 0;
-        alpha = 0;
-
-        // Determine which pixels are included in this bin
-        xBinStart = xBin * xBinSize;
-        xBinEnd = xBinStart + xBinSize;
-        yBinStart = yBin * yBinSize;
-        yBinEnd = yBinStart + yBinSize;
-
-        // Add all of the pixels to this bin!
-        pixelsInBin = 0;
-        for (x = xBinStart; x < xBinEnd; x += 1) {
-          if (x >= xSize) {
-            continue;
-          }
-          for (y = yBinStart; y < yBinEnd; y += 1) {
-            if (y >= ySize) {
-              continue;
-            }
-            i = (xSize * y + x) * 4;
-            red += srcPixels[i + 0];
-            green += srcPixels[i + 1];
-            blue += srcPixels[i + 2];
-            alpha += srcPixels[i + 3];
-            pixelsInBin += 1;
-          }
-        }
-
-        // Make sure the channels are between 0-255
-        red = red / pixelsInBin;
-        green = green / pixelsInBin;
-        blue = blue / pixelsInBin;
-        alphas = alpha / pixelsInBin;
-
-        // Draw this bin
-        for (x = xBinStart; x < xBinEnd; x += 1) {
-          if (x >= xSize) {
-            continue;
-          }
-          for (y = yBinStart; y < yBinEnd; y += 1) {
-            if (y >= ySize) {
-              continue;
-            }
-            i = (xSize * y + x) * 4;
-            dstPixels[i + 0] = red;
-            dstPixels[i + 1] = green;
-            dstPixels[i + 2] = blue;
-            dstPixels[i + 3] = alpha;
-          }
-        }
       }
     }
   }
