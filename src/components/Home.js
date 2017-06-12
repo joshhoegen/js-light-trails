@@ -10,7 +10,11 @@ export default class Home extends React.Component {
     const query = this.query;
     return (
       <div className="page-home">
-        <GreenScreen hex={query.hex || '2ab050'} />
+        <GreenScreen
+          hex={query.hex || '2ab050'}
+          size={query.size || '4'}
+          pixelate={query.pixelate || 'false'}
+        />
       </div>
     );
   }

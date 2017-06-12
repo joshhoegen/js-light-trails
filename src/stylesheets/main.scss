@@ -103,6 +103,12 @@ video {
     direction: rtl;
   }
 }
+.logo {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  z-index: 5;
+}
 .color-picker {
   float: left;
   margin-right: 20px;

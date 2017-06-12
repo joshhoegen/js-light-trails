@@ -18,15 +18,18 @@ export default class GreenScreen extends React.Component {
     }
 
     this.state = {
-      size: 4,
-      pixelate: false,
+      size: this.props.size,
+      pixelate: this.props.pixelate,
       color: hex,
     };
   }
 
   componentDidMount() {
     this.trails = new Trails(this.hexToRgbA(this.state.color));
+    this.trails.size = this.state.size;
+    this.trails.mode = this.state.pixelate === 'true' ? 'pixelate' : 'blur';
     this.trails.draw();
+    console.log(this.trails.mode);
   }
 
   hexToRgbA(hex) {
@@ -131,6 +134,7 @@ export default class GreenScreen extends React.Component {
             </canvas>
           </div>
         </div>
+        <img className="logo" src="media/jh-logo-80.png" alt="Art by Josh Hoegen" />
       </div>
     );
   }
