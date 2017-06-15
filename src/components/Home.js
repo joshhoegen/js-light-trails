@@ -1,16 +1,20 @@
-import React from "react";
-import GreenScreen from "./GreenScreen/index";
+import React from 'react';
+import GreenScreen from './trails/index';
 
-console.log(GreenScreen);
-
-// Home page component
 export default class Home extends React.Component {
-  // render
+  componentWillMount() {
+    this.query = this.props.location.query;
+  }
+
   render() {
+    const query = this.query;
     return (
       <div className="page-home">
-        <GreenScreen />
-        <h4>Hello world!</h4>
+        <GreenScreen
+          hex={query.hex || '2ab050'}
+          size={query.size || '4'}
+          pixelate={query.pixelate || 'false'}
+        />
       </div>
     );
   }
