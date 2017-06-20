@@ -134,7 +134,6 @@ export default class GreenScreen extends React.Component {
             </canvas>
           </div>
         </div>
-        <img className="logo" src="media/jh-logo-80.png" alt="Art by Josh Hoegen" />
       </div>
     );
   }

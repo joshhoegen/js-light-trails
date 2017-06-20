@@ -15,6 +15,9 @@ export default class Home extends React.Component {
           size={query.size || '4'}
           pixelate={query.pixelate || 'false'}
         />
+        <a href="http://joshhoegen.com">
+          <img className="logo" src="media/jh-logo-80.png" alt="Art by Josh Hoegen" />
+        </a>
       </div>
     );
   }
