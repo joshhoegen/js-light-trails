@@ -7,7 +7,8 @@ const Trails = class {
     this.selectedR = this.color[0];
     this.selectedG = this.color[1];
     this.selectedB = this.color[2];
-    this.pixelSize = 4 || size;
+    this.pixelSize = 4 || parseInt(size);
+    this.pixelSizeMax = 14;
     this.elCount = 0;
     this.elMax = 11;
     this.video = video;
@@ -62,7 +63,10 @@ const Trails = class {
     this.c[count].width = width;
     this.c[count].height = height;
 
-    const size = this.pixelSize / 100;
+    // Reverse "pixel size" because UI range only goes min to max
+    // 12 = max pixel size.
+    const sizeReverse = this.pixelSizeMax - this.pixelSize;
+    const size = sizeReverse / 100;
     const w = width * size;
     const h = height * size;
     const ctx = this.ctx[count];
