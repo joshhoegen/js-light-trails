@@ -88,7 +88,7 @@ export default class GreenScreen extends React.Component {
     return (
       <div>
         <div className="alert alert-success" role="alert">
-          <span className="glyphicon glyphicon-arrow-left" />&nbsp;
+          &nbsp;&#8592;&nbsp;
           Hover over the left corner to expose controls. Default color is green (2AB050).
           You can also choose color by appending "?hex=2AB050" in the address bar.
         </div>
@@ -134,7 +134,6 @@ export default class GreenScreen extends React.Component {
             </canvas>
           </div>
         </div>
-        <img className="logo" src="media/jh-logo-80.png" alt="Art by Josh Hoegen" />
       </div>
     );
   }

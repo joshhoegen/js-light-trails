@@ -9,7 +9,8 @@ const router = (
   <Router onUpdate={() => window.scrollTo(0, 0)} history={history}>
     <Route path="/" component={App}>
       <IndexRoute component={Home}/>
-      <Route path="*" component={NotFound}/>
+      <Route path="*" component={Home}/>
+      {/*<Route path="*" component={/*NotFound*/}/>*/}
     </Route>
   </Router>
 );

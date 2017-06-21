@@ -91,16 +91,15 @@ video {
   label {
     float: left;
     color: #fff;
-    margin: 1px 2% 0 0;
+    margin: 5px 2% 0 0;
   }
   input {
     float: left;
-    margin: 5px 24px 0 0;
+    margin: 7px 24px 0 0;
   }
   input#pixelSize {
     max-width: 25%;
-    margin-top: 3px;
-    direction: rtl;
+    margin-top: 5px;
   }
 }
 .logo {
@@ -117,11 +116,14 @@ video {
   z-index: 4;
   position: absolute;
   right: 0;
+  top: 19px;
+  padding: 10px 30px 10px 10px;
   visibility: visible;
   opacity: 0.7;
-  background: #CCC;
+  background: linear-gradient(to right, rgba(204,204,204,0), rgba(204,204,204,1));;
   text-align: center;
-  color: #000;
+  color: #fff;
+  text-shadow: 2px 2px 2px #000;
   border: #000;
   border-radius: 0;
   animation: fadeOutAlert 2s ease-in 4s forwards;
