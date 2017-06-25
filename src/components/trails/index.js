@@ -87,11 +87,6 @@ export default class GreenScreen extends React.Component {
   render() {
     return (
       <div>
-        <div className="alert alert-success" role="alert">
-          &nbsp;&#8592;&nbsp;
-          Hover over the left corner to expose controls. Default color is green (2AB050).
-          You can also choose color by appending "?hex=2AB050" in the address bar.
-        </div>
         <div className="controls" role="navigation">
           <div className="controls-wrapper">
             <ColorPickerPanel

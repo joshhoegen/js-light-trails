@@ -128,6 +128,17 @@ video {
   border-radius: 0;
   animation: fadeOutAlert 2s ease-in 4s forwards;
 }
+.other-art-link {
+  font-size: 70%;
+  position: absolute;
+  z-index: 3;
+  bottom: 10px;
+  left: 10px;
+  color: #fff;
+  text-shadow: 2px 2px 2px #333;
+  text-decoration: none;
+  cursor: pointer;
+}
 @keyframes fadeOutAlert {
   to {
     visibility: hidden;
