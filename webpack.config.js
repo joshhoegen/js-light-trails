@@ -36,7 +36,7 @@ module.exports = {
       },
       {
         test: /\.(jpe?g|gif|png)$/,
-        loader: 'file-loader?name=/public/media[name].[ext]'
+        loader: 'file-loader?name=public/media[name].[ext]'
       }
     ],
   },

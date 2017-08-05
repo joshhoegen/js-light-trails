@@ -1,6 +1,5 @@
 import React from 'react';
 import './assets/main.scss';
-import PixelImage from './assets/pixels.png';
 
 export default class Header extends React.Component {
   constructor(props) {
