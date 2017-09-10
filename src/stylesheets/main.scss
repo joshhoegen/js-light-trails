@@ -107,6 +107,7 @@ video {
     visibility: hidden;
     opacity: 0;
     transition: visibility 1s, opacity 0.5s ease-in-out;
+    animation: fadeInOut 9.5s;
   }
   &:hover {
     .controls-wrapper {
@@ -170,5 +171,23 @@ video {
   to {
     visibility: hidden;
     opacity: 0;
+  }
+}
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+  16% {
+    opacity: 1;
+    visibility: visible;
+  }
+  88% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
   }
 }
