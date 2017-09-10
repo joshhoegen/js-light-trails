@@ -68,6 +68,7 @@ export default class GreenScreen extends React.Component {
 
   togglePixel(event) {
     this.trails.stopDraw();
+    console.log('togglePixel');
     this.setState({
       pixelate: event.target.checked,
     });
@@ -112,6 +113,7 @@ export default class GreenScreen extends React.Component {
               id="pixelate"
               name="pixelate"
               type="checkbox"
+              checked={this.state.pixelate}
               onChange={this.togglePixel.bind(this)}
             />
           </div>
