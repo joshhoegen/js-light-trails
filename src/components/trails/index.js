@@ -32,6 +32,7 @@ export default class GreenScreen extends React.Component {
     console.log(this.trails.mode);
   }
 
+  // Add to utils
   hexToRgbA(hex) {
     let c;
     let rgb = [];
@@ -68,7 +69,6 @@ export default class GreenScreen extends React.Component {
 
   togglePixel(event) {
     this.trails.stopDraw();
-    console.log('togglePixel');
     this.setState({
       pixelate: event.target.checked,
     });
