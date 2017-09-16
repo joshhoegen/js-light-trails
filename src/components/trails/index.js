@@ -32,6 +32,7 @@ export default class GreenScreen extends React.Component {
     console.log(this.trails.mode);
   }
 
+  // Add to utils
   hexToRgbA(hex) {
     let c;
     let rgb = [];
@@ -112,6 +113,7 @@ export default class GreenScreen extends React.Component {
               id="pixelate"
               name="pixelate"
               type="checkbox"
+              checked={this.state.pixelate}
               onChange={this.togglePixel.bind(this)}
             />
           </div>
