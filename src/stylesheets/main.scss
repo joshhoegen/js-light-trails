@@ -36,12 +36,11 @@ h1 {
     min-width: 100%;
 }
 
-@media screen and (orientation: portrait) {
-  #wrapper canvas, #wrapper video {
-    // Edit for desktop bug. May need to target mobile.
-    object-fit: contain;
-  }
+.mobile #wrapper canvas, .mobile #wrapper video {
+  // Edit for desktop bug. May need to target mobile.
+  object-fit: contain;
 }
+
 
 @media (max-aspect-ratio: 1/1) {
     #wrapper canvas, #wrapper video {
