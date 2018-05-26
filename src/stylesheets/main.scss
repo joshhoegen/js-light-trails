@@ -38,7 +38,9 @@ h1 {
 
 .mobile #wrapper canvas, .mobile #wrapper video {
   // Edit for desktop bug. May need to target mobile.
-  object-fit: contain;
+  object-fit: cover;
+  min-height: 100%;
+  min-width: 100%;
 }
 
 
