@@ -126,7 +126,7 @@ export default class GreenScreen extends React.Component {
             />
           </div>
           <div id="output">
-            <canvas id="videoscreen">
+            <canvas id="videoscreen" width={600} height={400}>
               <p>Sorry your browser does not support HTML5</p>
             </canvas>
           </div>
