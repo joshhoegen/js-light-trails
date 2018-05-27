@@ -34,14 +34,15 @@ h1 {
 #wrapper canvas, #wrapper video {
     min-height: 100%;
     min-width: 100%;
+    object-fit: cover;
 }
 
-.mobile #wrapper canvas, .mobile #wrapper video {
-  // Edit for desktop bug. May need to target mobile.
-  object-fit: cover;
-  min-height: 100%;
-  min-width: 100%;
-}
+// .mobile #wrapper canvas, .mobile #wrapper video {
+//   // Edit for desktop bug. May need to target mobile.
+//   object-fit: cover;
+//   min-height: 100%;
+//   min-width: 100%;
+// }
 
 
 @media (max-aspect-ratio: 1/1) {
