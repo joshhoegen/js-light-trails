@@ -32,6 +32,7 @@ export default class GreenScreen extends React.Component {
     console.log(this.trails.mode);
   }
 
+  // Add to utils
   hexToRgbA(hex) {
     let c;
     let rgb = [];
@@ -87,11 +88,6 @@ export default class GreenScreen extends React.Component {
   render() {
     return (
       <div>
-        <div className="alert alert-success" role="alert">
-          <span className="glyphicon glyphicon-arrow-left" />&nbsp;
-          Hover over the left corner to expose controls. Default color is green (2AB050).
-          You can also choose color by appending "?hex=2AB050" in the address bar.
-        </div>
         <div className="controls" role="navigation">
           <div className="controls-wrapper">
             <ColorPickerPanel
@@ -117,6 +113,7 @@ export default class GreenScreen extends React.Component {
               id="pixelate"
               name="pixelate"
               type="checkbox"
+              checked={this.state.pixelate}
               onChange={this.togglePixel.bind(this)}
             />
           </div>
@@ -129,12 +126,11 @@ export default class GreenScreen extends React.Component {
             />
           </div>
           <div id="output">
-            <canvas id="videoscreen">
+            <canvas id="videoscreen" width={600} height={400}>
               <p>Sorry your browser does not support HTML5</p>
             </canvas>
           </div>
         </div>
-        <img className="logo" src="media/jh-logo-80.png" alt="Art by Josh Hoegen" />
       </div>
     );
   }

@@ -1,22 +1,73 @@
+html {
+  background: -webkit-linear-gradient(#000, #333);
+  height: 100vh;
+  max-height: 100%;
+  overflow: hidden;
+}
+
 body {
   font-family: Verdana;
   font-size: 12px;
+  color: #fff;
+  text-shadow: 2px 1px 6px #000;
+  margin: 0px;
 }
+// #source, #output {
+//   width: 100%;
+//   &:after {
+//   	content: "";
+//   	display: block;
+//   	padding-top: 75%; /* 406 over 1500  */
+//   }
+// }
 h1 {
   font-size: 14px;
   font-weight: bold;
 }
 #output {
   background: #333;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
 }
+
+#wrapper canvas, #wrapper video {
+    min-height: 100%;
+    min-width: 100%;
+}
+
+.mobile #wrapper canvas, .mobile #wrapper video {
+  // Edit for desktop bug. May need to target mobile.
+  object-fit: cover;
+  min-height: 100%;
+  min-width: 100%;
+}
+
+
+@media (max-aspect-ratio: 1/1) {
+    #wrapper canvas, #wrapper video {
+        // height: 100vh;
+        // width: 200%;
+        object-fit: cover;
+        // left: -50%;
+    }
+}
+
+// @media (min-aspect-ratio: 1/1) {
+//     canvas, video{
+//         height: 100vh;
+//         width: calc((3/4)*100vh);
+//     }
+// }
+
 canvas {
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: calc((3/4)*100vw);
   z-index: 1;
   -moz-transform: scale(-1, 1);
   -webkit-transform: scale(-1, 1);
@@ -26,13 +77,15 @@ canvas {
 }
 video {
   // display: none;
+  width: 100vw;
+  height: calc((3/4)*100vw);
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  min-width: 100%;
-  min-height: 100%;
+  // min-width: 100%;
+  // min-height: 100%;
   // width: auto;
   // height: auto;
   z-index: 0;
@@ -80,6 +133,7 @@ video {
     visibility: hidden;
     opacity: 0;
     transition: visibility 1s, opacity 0.5s ease-in-out;
+    animation: fadeInOut 9.5s;
   }
   &:hover {
     .controls-wrapper {
@@ -91,16 +145,15 @@ video {
   label {
     float: left;
     color: #fff;
-    margin: 1px 2% 0 0;
+    margin: 5px 2% 0 0;
   }
   input {
     float: left;
-    margin: 5px 24px 0 0;
+    margin: 7px 24px 0 0;
   }
   input#pixelSize {
     max-width: 25%;
-    margin-top: 3px;
-    direction: rtl;
+    margin-top: 5px;
   }
 }
 .logo {
@@ -117,18 +170,50 @@ video {
   z-index: 4;
   position: absolute;
   right: 0;
+  top: 19px;
+  padding: 10px 30px 10px 10px;
   visibility: visible;
   opacity: 0.7;
-  background: #CCC;
+  background: linear-gradient(to right, rgba(204,204,204,0), rgba(204,204,204,1));;
   text-align: center;
-  color: #000;
+  color: #fff;
+  text-shadow: 2px 2px 2px #000;
   border: #000;
   border-radius: 0;
   animation: fadeOutAlert 2s ease-in 4s forwards;
+}
+.other-art-link {
+  font-size: 70%;
+  position: absolute;
+  z-index: 3;
+  bottom: 10px;
+  left: 10px;
+  color: #fff;
+  text-shadow: 2px 2px 2px #333;
+  text-decoration: none;
+  cursor: pointer;
 }
 @keyframes fadeOutAlert {
   to {
     visibility: hidden;
     opacity: 0;
+  }
+}
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+  16% {
+    opacity: 1;
+    visibility: visible;
+  }
+  88% {
+    opacity: 1;
+    visibility: visible;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
   }
 }
