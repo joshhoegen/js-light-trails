@@ -28,7 +28,11 @@ const Trails = class {
       navigator.mediaDevices.getUserMedia({
         video: true,
       }).then((stream) => {
-        video.src = window.URL.createObjectURL(stream);
+        try {
+          video.srcObject = stream;
+        } catch (error) {
+          video.src = window.URL.createObjectURL(stream);
+        }
         video.play();
         let i = self.elMax;
         while (i--) {
