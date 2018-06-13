@@ -27,7 +27,7 @@ export default class GreenScreen extends React.Component {
   }
 
   componentDidMount() {
-    let rgb = this.hexToRgbA(this.state.color)
+    let rgb = this.hexToRgbA(this.state.color) || [42, 176, 80];
     this.trails = new Trails(rgb);
     this.trails.size = this.state.size;
     this.trails.mode = this.state.pixelate === 'true'
@@ -100,6 +100,11 @@ export default class GreenScreen extends React.Component {
     return [r, g, b];
   }
 
+  colorPicker(colorObject) {
+    const rgb = this.hexToRgbA(colorObject.color);
+    this.changeColor(rgb);
+  }
+
   changeColor(arr) {
     this.trails.selectedR = arr[0];
     this.trails.selectedG = arr[1];
@@ -143,7 +148,7 @@ export default class GreenScreen extends React.Component {
       <div>
         <div className="controls" role="navigation">
           <div className="controls-wrapper">
-            <ColorPickerPanel defaultColor={this.state.color} onChange={this.changeColor.bind(this.hexToRgbA(this))} placement="topLeft" className="color-picker">
+            <ColorPickerPanel defaultColor={this.state.color} onChange={this.colorPicker.bind(this)} placement="topLeft" className="color-picker">
               <span className="rc-color-picker-trigger"/>
             </ColorPickerPanel>
             <label htmlFor="pixelSize">Size</label><input id="pixelSize" name="pixelSize" type="range" min="0" max="12" defaultValue={this.state.pixelate} step="2" onChange={this.changeSize.bind(this)}/>
