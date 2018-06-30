@@ -1,3 +1,5 @@
+import outputParticles from '../particle/Particle';
+
 const Trails = class {
   constructor(color, size) {
     // Since this is still an experiment, errrrthing is exposed.
@@ -22,6 +24,7 @@ const Trails = class {
     this.ctx = [];
     this.container = document.getElementById('output');
     this.animationFrame;
+    this.particles;
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       // Not adding `{ audio: true }` since we only want video now
@@ -40,8 +43,11 @@ const Trails = class {
           self.c[i].id = `canvas_${i}`;
           self.ctx[i] = self.c[i].getContext('2d');
           self.container.appendChild(self.c[i]);
+          // Conditional for particles
+          self.particles = new outputParticles(self.c[i], self.ctx[i]);
         }
       });
+
     }
   }
 
@@ -79,10 +85,18 @@ const Trails = class {
       ctx.webkitImageSmoothingEnabled = false;
       ctx.imageSmoothingEnabled = false;
     }
+
+    // TODO: Move to props/checkbox
+    this.mode = 'particle';
     if (this.mode === 'blur' || this.mode === 'pixelate') {
       // draw the original image at a fraction of the final size
       ctx.drawImage(this.video, 0, 0, w, h);
       ctx.drawImage(this.c[count], 0, 0, w, h, 0, 0, width, height);
+    } else if (this.mode === 'particle') {
+
+      // this.stopDraw();
+      // this.generateThumbnail2(this.height, this.width);
+      this.particles.loop();
     } else {
       ctx.drawImage(this.video, 0, 0, width, height);
     }
