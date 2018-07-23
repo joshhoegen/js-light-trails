@@ -1,3 +1,10 @@
+.mobile video, .mobile canvas {
+    object-fit: fill !important;
+    object-position: 50% 50% !important;
+    width: 600px !important;
+    height: 400px !important;
+}
+
 html {
   background: -webkit-linear-gradient(#000, #333);
   height: 100vh;
@@ -120,12 +127,12 @@ video {
 }
 .controls {
   display: table;
-  z-index: 2;
+  z-index: 3;
   position: fixed;
   padding: 20px;
   left: 0;
   top: 0;
-  min-width: 30%;
+  min-width: 100%;
   min-height: 40px;
   .controls-wrapper {
     display: table-cell;

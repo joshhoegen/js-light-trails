@@ -4,6 +4,8 @@ const Trails = class {
     const self = this;
     const video = document.getElementById('videodata');
     this.color = color || [42, 176, 80];
+    this.colorize = [];
+    this.mosaic = false;
     this.selectedR = this.color[0];
     this.selectedG = this.color[1];
     this.selectedB = this.color[2];
@@ -28,7 +30,11 @@ const Trails = class {
       navigator.mediaDevices.getUserMedia({
         video: true,
       }).then((stream) => {
-        video.src = window.URL.createObjectURL(stream);
+        try {
+          video.srcObject = stream;
+        } catch (error) {
+          video.src = window.URL.createObjectURL(stream);
+        }
         video.play();
         let i = self.elMax;
         while (i--) {
@@ -109,39 +115,56 @@ const Trails = class {
       b = imgDataNormal.data[i + 2];
       a = imgDataNormal.data[i + 3];
 
-      if (r < this.selectedR - 80 || r > this.selectedR + 80) {
+      const inRange = (r < this.selectedR - 80 || r > this.selectedR + 80 ||
+        g < this.selectedG - 80 || g > this.selectedG + 80 ||
+        b < this.selectedB - 80 || b > this.selectedB + 80);
+
+      // Turn off pixles not in range
+      if (!this.mosaic && inRange) {
         a = 0;
       }
-      if (g < this.selectedG - 80 || g > this.selectedG + 80) {
-        a = 0;
+      if (this.mosaic) {
+        a = 20;
       }
-      if (b < this.selectedB - 80 || b > this.selectedB + 80) {
-        a = 0;
+      if (this.colorize.length) {
+        r = this.selectedR;
+        g = this.selectedG;
+        b = this.selectedB;
+        a = this.mosaic && inRange ? 20 : a - 240;
       }
+
+      // // Fade pixels at end of range
+      // if (r < this.selectedR - 60 || r > this.selectedR + 60 ||
+      //   g < this.selectedG - 60 || g > this.selectedG + 60 ||
+      //   b < this.selectedB - 60 || b > this.selectedB + 60) {
+      //   a = a - 240;
+      // }
+
+      // a !== 0
       if (a !== 0) {
-        /*eslint-disable */
         imgData.data[i + 0] = r;
         imgData.data[i + 1] = g;
         imgData.data[i + 2] = b;
         imgData.data[i + 3] = a;
-        /*eslint-enable */
-
-        // TODO: Add to own method for extraHorizontalDistortion()
-        // for (j = 0; j < 44; j += 4) {
-        //   imgData.data[(i + 0) - j] = r;
-        //   imgData.data[(i + 1) - j] = g;
-        //   imgData.data[(i + 2) - j] = b;
-        //   imgData.data[(i + 3) - j] = a;
-        //
-        //   imgData.data[((i + 0) * imgData.width) - j] = r;
-        //   imgData.data[((i + 1) * imgData.width) - j] = g;
-        //   imgData.data[((i + 2) * imgData.width) - j] = b;
-        //   imgData.data[((i + 3) * imgData.width) - j] = a;
-        // }
       }
     }
   }
 };
+
+/*eslint-enable */
+
+// TODO: Add to own method for extraHorizontalDistortion()
+// for (j = 0; j < 44; j += 4) {
+//   imgData.data[(i + 0) - j] = r;
+//   imgData.data[(i + 1) - j] = g;
+//   imgData.data[(i + 2) - j] = b;
+//   imgData.data[(i + 3) - j] = a;
+//
+//   imgData.data[((i + 0) * imgData.width) - j] = r;
+//   imgData.data[((i + 1) * imgData.width) - j] = g;
+//   imgData.data[((i + 2) * imgData.width) - j] = b;
+//   imgData.data[((i + 3) * imgData.width) - j] = a;
+// }
 
 export {
   Trails,
