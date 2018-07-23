@@ -22,7 +22,9 @@ export default class GreenScreen extends React.Component {
       size: this.props.size,
       pixelate: this.props.pixelate,
       color: hex,
-      cycle: false
+      cycle: false,
+      colorize: false,
+      mosaic: false
     };
   }
 
@@ -88,15 +90,15 @@ export default class GreenScreen extends React.Component {
   cycleColor(r, g, b) {
     let frequency = 2.4; //.3
     let t = this.time;
-    let center = 230;
-    let width = 25;
+    let center = 100;
+    let width = 60;
 
     r = Math.round(Math.sin(frequency * t + 0) * width + center);
     g = Math.round(Math.sin(frequency * t + 2) * width + center);
     b = Math.round(Math.sin(frequency * t + 4) * width + center);
 
     this.time = this.it(this.time);
-    // console.log('%c' + r + g + b, 'color: rgba(' + r + ', ' + g + ', ' + b + ', 1)');
+    console.log('%c' + r + g + b, 'color: rgba(' + r + ', ' + g + ', ' + b + ', 1)');
     return [r, g, b];
   }
 
@@ -115,6 +117,28 @@ export default class GreenScreen extends React.Component {
         this.changeColor(newColor);
       }, 4500)
     }
+  }
+
+  colorizeImage(event) {
+    const colorize = event.target.checked;
+    this.setState({
+      colorize: colorize
+    });
+
+    if (colorize) {
+      this.trails.colorize = [this.trails.selectedR, this.trails.selectedG, this.trails.selectedB];
+    } else {
+      this.trails.colorize = [];
+    }
+  }
+
+  mosaicImage(event) {
+    const mosaic = event.target.checked;
+    this.setState({
+      mosaic: mosaic
+    });
+    this.trails.mosaic = mosaic;
+    console.log(this.trails.mosaic);
   }
 
   changeSize(event) {
@@ -154,6 +178,8 @@ export default class GreenScreen extends React.Component {
             <label htmlFor="pixelSize">Size</label><input id="pixelSize" name="pixelSize" type="range" min="0" max="12" defaultValue={this.state.pixelate} step="2" onChange={this.changeSize.bind(this)}/>
             <label htmlFor="pixelate">Pixelate</label><input id="pixelate" name="pixelate" type="checkbox" checked={this.state.pixelate} onChange={this.togglePixel.bind(this)}/>
             <label htmlFor="cycle">Cycle</label><input id="cycle" name="cycle" type="checkbox" checked={this.state.cycle} onChange={this.cycle.bind(this)}/>
+            <label htmlFor="colorize">Colorize</label><input id="colorize" name="colorize" type="checkbox" checked={this.state.colorize} onChange={this.colorizeImage.bind(this)}/>
+            <label htmlFor="colorize">Mosaic</label><input id="mosaic" name="mosaic" type="checkbox" checked={this.state.mosaic} onChange={this.mosaicImage.bind(this)}/>
           </div>
         </div>{/* /.navbar */}
         <div id="wrapper">
