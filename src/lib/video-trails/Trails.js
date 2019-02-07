@@ -1,8 +1,12 @@
+import VideoToCanvas from 'live-video';
+
 const Trails = class {
   constructor(color, size) {
     // Since this is still an experiment, errrrthing is exposed.
     const self = this;
     const video = document.getElementById('videodata');
+    const v2c = new VideoToCanvas(video, false)
+
     this.color = color || [42, 176, 80];
     this.colorize = [];
     this.mosaic = false;
@@ -25,26 +29,15 @@ const Trails = class {
     this.container = document.getElementById('output');
     this.animationFrame;
 
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      // Not adding `{ audio: true }` since we only want video now
-      navigator.mediaDevices.getUserMedia({
-        video: true,
-      }).then((stream) => {
-        try {
-          video.srcObject = stream;
-        } catch (error) {
-          video.src = window.URL.createObjectURL(stream);
-        }
-        video.play();
-        let i = self.elMax;
-        while (i--) {
-          self.c[i] = document.createElement('canvas');
-          self.c[i].id = `canvas_${i}`;
-          self.ctx[i] = self.c[i].getContext('2d');
-          self.container.appendChild(self.c[i]);
-        }
-      });
-    }
+    v2c.play().then(() => {
+      let i = self.elMax;
+      while (i--) {
+        self.c[i] = document.createElement('canvas');
+        self.c[i].id = `canvas_${i}`;
+        self.ctx[i] = self.c[i].getContext('2d');
+        self.container.appendChild(self.c[i]);
+      }
+    });
   }
 
   draw() {
