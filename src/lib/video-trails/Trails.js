@@ -5,7 +5,10 @@ const Trails = class {
     // Since this is still an experiment, errrrthing is exposed.
     const self = this;
     const video = document.getElementById('videodata');
-    const v2c = new VideoToCanvas(video, false)
+    const v2c = new VideoToCanvas({
+      video,
+      audio: false
+    })
 
     this.color = color || [42, 176, 80];
     this.colorize = [];
