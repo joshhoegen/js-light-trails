@@ -1,15 +1,17 @@
-import VideoToCanvas from 'live-video';
+import LiveVideo from 'live-video';
 
 const Trails = class {
-  constructor(color, size) {
+  constructor(color, camera) {
     // Since this is still an experiment, errrrthing is exposed.
     const self = this;
     const video = document.getElementById('videodata');
-    const v2c = new VideoToCanvas({
+    this.cameraInstance = new LiveVideo({
       video,
-      audio: false
-    })
+      audio: false,
+      camera,
+    });
 
+    this.cameraList = LiveVideo.listCameras();
     this.color = color || [42, 176, 80];
     this.colorize = [];
     this.mosaic = false;
@@ -32,7 +34,7 @@ const Trails = class {
     this.container = document.getElementById('output');
     this.animationFrame;
 
-    v2c.play().then(() => {
+    this.cameraInstance.play().then(() => {
       let i = self.elMax;
       while (i--) {
         self.c[i] = document.createElement('canvas');
@@ -47,6 +49,13 @@ const Trails = class {
     this.amimationFrame = window.requestAnimationFrame(this.draw.bind(this));
     if (this.c.length > 9 && this.ctx.length > 9) {
       this.generateThumbnail2(this.height, this.width);
+    }
+  }
+
+  removeCanvases() {
+    let i = this.elMax;
+    while (i--) {
+      this.c[i].remove();
     }
   }
 
@@ -98,22 +107,28 @@ const Trails = class {
     }
   }
 
-  addGreenScreen(imgData, imgDataNormal) { // , width, height
+  addGreenScreen(imgData, imgDataNormal) {
+    // , width, height
     let i;
     let r = 0;
     let g = 0;
     let b = 0;
     let a = 0;
     // eslint disabled because this is faster: https://jsperf.com/for-vs-while/11
-    for (i = this.imgDataLength; i -= 4;) { // eslint-disable-line no-cond-assign
+    for (i = this.imgDataLength; (i -= 4);) {
+      // eslint-disable-line no-cond-assign
       r = imgDataNormal.data[i + 0];
       g = imgDataNormal.data[i + 1];
       b = imgDataNormal.data[i + 2];
       a = imgDataNormal.data[i + 3];
 
-      const inRange = (r < this.selectedR - 80 || r > this.selectedR + 80 ||
-        g < this.selectedG - 80 || g > this.selectedG + 80 ||
-        b < this.selectedB - 80 || b > this.selectedB + 80);
+      const inRange =
+        r < this.selectedR - 80 ||
+        r > this.selectedR + 80 ||
+        g < this.selectedG - 80 ||
+        g > this.selectedG + 80 ||
+        b < this.selectedB - 80 ||
+        b > this.selectedB + 80;
 
       // Turn off pixles not in range
       if (!this.mosaic && inRange) {
@@ -147,7 +162,7 @@ const Trails = class {
   }
 };
 
-/*eslint-enable */
+/* eslint-enable */
 
 // TODO: Add to own method for extraHorizontalDistortion()
 // for (j = 0; j < 44; j += 4) {
@@ -162,6 +177,4 @@ const Trails = class {
 //   imgData.data[((i + 3) * imgData.width) - j] = a;
 // }
 
-export {
-  Trails,
-};
+export { Trails };
