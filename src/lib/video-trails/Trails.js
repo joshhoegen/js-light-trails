@@ -5,6 +5,7 @@ const Trails = class {
     // Since this is still an experiment, errrrthing is exposed.
     const self = this;
     const video = document.getElementById('videodata');
+    console.log(video);
     this.cameraInstance = new LiveVideo({
       video,
       audio: false,
@@ -63,6 +64,10 @@ const Trails = class {
     if (this.amimationFrame) {
       window.cancelAnimationFrame(this.amimationFrame);
       this.amimationFrame = undefined;
+    }
+
+    if (this.cameraInstance) {
+      this.cameraInstance.stop();
     }
   }
 

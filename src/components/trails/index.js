@@ -17,7 +17,7 @@ export default class GreenScreen extends React.Component {
     }
 
     this.state = {
-      activeCamera: 0,
+      activeCamera: this.props.activeCamera,
       cameraList: [],
       size: this.props.size,
       pixelate: this.props.pixelate,
@@ -29,15 +29,11 @@ export default class GreenScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.setupTrails();
+    this.setupTrails(this.props.activeCamera);
   }
 
   setupTrails(camera) {
     const rgb = this.hexToRgbA(this.state.color) || [42, 176, 80];
-
-    if (this.trails) {
-      this.trails.stopDraw();
-    }
 
     this.trails = new Trails(rgb, parseInt(camera) || 0);
     this.trails.pixelSize = this.state.size;
@@ -46,23 +42,26 @@ export default class GreenScreen extends React.Component {
     this.trails.selectedR = rgb[0];
     this.trails.selectedG = rgb[1];
     this.trails.selectedB = rgb[2];
-    this.trails.draw();
-
-    console.log(this.trails.mode);
 
     this.trails.cameraList.then((d) => {
       this.setState({
         cameraList: d,
         activeCamera: camera,
       });
+
+      this.trails.draw();
     });
+
+    console.log(this.trails.mode);
   }
 
   changeCamera(event) {
     const camera = event.target.value;
     this.trails.removeCanvases();
-    console.log(this.state.size);
-    this.setupTrails(camera);
+    if (this.trails) {
+      this.trails.stopDraw();
+      this.setupTrails(camera);
+    }
   }
 
   // Add to utils

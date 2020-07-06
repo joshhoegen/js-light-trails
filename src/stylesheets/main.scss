@@ -245,7 +245,8 @@ video {
   }
   .controls label {
     display: block;
-    width: 25%;
+    clear: both;
+    width: 38%;
     height: 30px;
     margin-top: 20px;
   }
@@ -253,7 +254,7 @@ video {
   .controls input,
   .controls select {
     margin-right: 50%;
-    margin-top: 20px;
+    margin-top: 14px;
     height: 30px;
   }
 }
