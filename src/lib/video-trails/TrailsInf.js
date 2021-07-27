@@ -21,7 +21,7 @@ const Trails = class {
     this.pixelSize = 4 || parseInt(size)
     this.pixelSizeMax = 14
     this.elCount = 0
-    this.elMax = 24
+    this.elMax = 20
     this.video = video
     this.width = video.width
     this.height = video.height
@@ -50,14 +50,21 @@ const Trails = class {
     this.lastIntervalTimestamp = 0
 
     this.cameraInstance.play().then(() => {
+      // let i = self.elMax
+      // while (i--) {
+      //   self.c[i] = document.createElement('canvas')
+      //   self.c[i].id = `canvas_${i}`
+      //   self.ctx[i] = self.c[i].getContext('2d')
+      //   self.container.appendChild(self.c[i])
+      // }
       self.c.id = 'canvas_trails'
       self.container.appendChild(self.c)
     })
   }
 
-  draw() {    
+  draw() {
     this.c.width = this.width
-    this.c.height = this.height    
+    this.c.height = this.height
     this.ctxPre.map((c) => {
       const isPixels = this.mode === 'pixelate'
       c.webkitImageSmoothingEnabled = !isPixels
@@ -70,17 +77,17 @@ const Trails = class {
 
   animate(time) {
     this.amimationFrame = window.requestAnimationFrame(this.animate.bind(this))
-
-    // if (Date.now() - this.animationFrameTime >= 30 && this.imgData[0]) {
-    //   this.ctx.putImageData(this.imgData[0], 0, 0)
+    // if (this.c.length > 9 && this.ctx.length > 9) {
+    //   this.generateThumbnail2(this.height, this.width)
     // }
 
     if (this.ctx && this.ctxPre) {
+      // if (Date.now() - this.animationFrameTime >= 30) {
       this.generateThumbnail2()
 
-      this.animationFrameTime = Date.now()
+      // this.animationFrameTime = Date.now()
+      // }
     }
-
   }
 
   removeCanvases() {
@@ -102,12 +109,12 @@ const Trails = class {
 
     // TODO: See if we can set this once.
     // Initial attempts had unexpected results.
-    const width = this.width
-    const height = this.height
-
 
     // Reverse "pixel size" because UI range only goes min to max
     // 12 = max pixel size.
+
+    const width = this.width
+    const height = this.height
     const sizeReverse = this.pixelSizeMax - this.pixelSize
     const size = sizeReverse / 100
     const w = width * size
@@ -115,12 +122,35 @@ const Trails = class {
     const ctx = this.ctx
     const pCtx = this.ctxPre
 
+    // Single
+    // this.cPre.width = width
+    // this.cPre.height = height
+
+    // if (this.mode === 'pixelate') {
+    //   pCtx.webkitImageSmoothingEnabled = false
+    //   pCtx.imageSmoothingEnabled = false
+    // }
+    // if (this.mode === 'blur' || this.mode === 'pixelate') {
+    //   // draw the original image at a fraction of the final size
+    //   pCtx.drawImage(this.video, 0, 0, w, h)
+    //   pCtx.drawImage(this.cPre, 0, 0, w, h, 0, 0, width, height)
+    // } else {
+    //   pCtx.drawImage(this.video, 0, 0, width, height)
+    // }
+
+    // for (let i = 0; i < this.elMax; i++) {
+    //   this.imgDataNormal[i] = pCtx.getImageData(0, 0, width, height)
+    //   this.imgData[i] = pCtx.createImageData(width, height)
+    //   this.addGreenScreen(this.imgData[i], this.imgDataNormal[i]) // , width, height
+
+    //   pCtx.putImageData(this.imgData[i], 0, 0)
+
+    //   ctx.drawImage(this.cPre, 0, 0)
+
+    // }
+
     // Working multi choppy
     for (let i = 0; i < this.elMax; i++) {
-      // Remove to make infinite
-      if (i === 0 && this.imgData[0]) {
-        this.ctx.putImageData(this.imgData[0], 0, 0)
-      }
       if (this.mode === 'blur' || this.mode === 'pixelate') {
         // draw the original image at a fraction of the final size
         pCtx[i].drawImage(this.video, 0, 0, w, h)
@@ -132,13 +162,35 @@ const Trails = class {
       this.imgDataNormal[i] = pCtx[i].getImageData(0, 0, width, height)
       this.imgData[i] = pCtx[i].createImageData(width, height)
       this.addGreenScreen(this.imgData[i], this.imgDataNormal[i]) // , width, height
+
       pCtx[i].putImageData(this.imgData[i], 0, 0)
+
       ctx.drawImage(this.cPre[i], 0, 0)
-      
 
-      
-
+      // this.image[i].height = height
+      // this.image[i].width = width
+      // this.image[i].src = this.cPre[i].toDataURL()
+      // this.image[i].onload = () => {
+      //   // console.log(this.image[i])
+      //   // console.log('%c ', `font-size:400px; background:url(${this.image[i].src}) no-repeat;`)
+      //   // console.log(this.c)
+      //   ctx.drawImage(this.image[i], 0, 0)
+      // }
     }
+
+    // WORKING SOLO:
+    // if (this.mode === 'blur' || this.mode === 'pixelate') {
+    //   // draw the original image at a fraction of the final size
+    //   ctx.drawImage(this.video, 0, 0, w, h)
+    //   ctx.drawImage(this.c, 0, 0, w, h, 0, 0, width, height)
+    // } else {
+    //   ctx.drawImage(this.video, 0, 0, width, height)
+    // }
+    // this.imgDataNormal = ctx.getImageData(0, 0, width, height)
+    // this.imgData = ctx.createImageData(width, height)
+    // this.addGreenScreen(this.imgData, this.imgDataNormal) // , width, height
+
+    // ctx.putImageData(this.imgData, 0, 0)
   }
 
   addGreenScreen(imgData, imgDataNormal) {
@@ -212,3 +264,4 @@ const Trails = class {
 // }
 
 export { Trails }
+
