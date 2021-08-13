@@ -125,6 +125,8 @@ export default class GreenScreen extends React.Component {
     this.trails.selectedR = arr[0]
     this.trails.selectedG = arr[1]
     this.trails.selectedB = arr[2]
+    this.trails.stopDraw()
+    this.changePixels()
     if (this.state.cycle === true) {
       setTimeout(() => {
         const newColor = this.cycleColor(arr[0], arr[1], arr[2])

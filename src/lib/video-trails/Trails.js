@@ -84,15 +84,17 @@ const Trails = class {
     this.animate()
   }
 
-  animate() {
+  animate(time) {
+    console.log(time)
     if (this.animationFrameTime > 90) {
+      console.log('stop')
       window.cancelAnimationFrame(this.amimationFrame)
       this.amimationFrame = undefined
       this.animationFrameTime = 0
-      setTimeout(() => {
-        this.animate()
-      }, 100)
+      this.animate()
+      return
     } else {
+      console.log('go')
       this.amimationFrame = window.requestAnimationFrame(this.animate.bind(this))
       if (this.ctx && this.ctxPre) {
         this.generateThumbnail2()
