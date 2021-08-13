@@ -21,10 +21,13 @@ const Trails = class {
     this.pixelSize = 4 || parseInt(size)
     this.pixelSizeMax = 14
     this.elCount = 0
-    this.elMax = 24
+    this.elMax = 12
+    this.elMaxDouble = 0
     this.video = video
-    this.width = video.width
-    this.height = video.height
+    this.width = video.offsetWidth
+    this.height = video.offsetHeight
+    this.left = video.getBoundingClientRect().left
+    this.top = video.getBoundingClientRect().top
     this.imgData = []
     this.imgDataNormal = []
     this.image = new Array(this.elMax).fill(undefined).map(() => new Image())
@@ -33,8 +36,16 @@ const Trails = class {
     this.c = document.createElement('canvas')
     this.ctx = this.c.getContext('2d')
 
-    // this.cPre = document.createElement('canvas')
-    // this.ctxPre = this.cPre.getContext('2d')
+    this.cSrc2 = document.createElement('canvas')
+    this.ctxSrc2 = this.cSrc2.getContext('2d')
+
+    this.cSrc = new Array(this.elMax).fill(undefined).map(() => {
+      const canvas = document.createElement('canvas')
+      canvas.height = this.height
+      canvas.width = this.width
+      return canvas
+    })
+    this.ctxSrc = this.cSrc.map((c) => c.getContext('2d'))
 
     this.cPre = new Array(this.elMax).fill(undefined).map(() => {
       const canvas = document.createElement('canvas')
@@ -46,7 +57,7 @@ const Trails = class {
 
     this.container = document.getElementById('output')
     this.animationFrame
-    this.animationFrameTime = Date.now()
+    this.animationFrameTime = 0
     this.lastIntervalTimestamp = 0
 
     this.cameraInstance.play().then(() => {
@@ -55,9 +66,14 @@ const Trails = class {
     })
   }
 
-  draw() {    
+  draw() {
     this.c.width = this.width
-    this.c.height = this.height    
+    this.c.height = this.height
+    this.cSrc2.width = this.width
+    this.cSrc2.height = this.height
+    this.video.width = this.width
+    this.video.height = this.height
+
     this.ctxPre.map((c) => {
       const isPixels = this.mode === 'pixelate'
       c.webkitImageSmoothingEnabled = !isPixels
@@ -68,19 +84,23 @@ const Trails = class {
     this.animate()
   }
 
-  animate(time) {
-    this.amimationFrame = window.requestAnimationFrame(this.animate.bind(this))
-
-    // if (Date.now() - this.animationFrameTime >= 30 && this.imgData[0]) {
-    //   this.ctx.putImageData(this.imgData[0], 0, 0)
-    // }
-
-    if (this.ctx && this.ctxPre) {
-      this.generateThumbnail2()
-
-      this.animationFrameTime = Date.now()
+  animate() {
+    if (this.animationFrameTime > 90) {
+      window.cancelAnimationFrame(this.amimationFrame)
+      this.amimationFrame = undefined
+      this.animationFrameTime = 0
+      setTimeout(() => {
+        this.animate()
+      }, 100)
+    } else {
+      this.amimationFrame = window.requestAnimationFrame(this.animate.bind(this))
+      if (this.ctx && this.ctxPre) {
+        this.generateThumbnail2()
+      }
+      this.animationFrameTime += 1
     }
 
+   
   }
 
   removeCanvases() {
@@ -92,20 +112,22 @@ const Trails = class {
 
   stopDraw() {
     if (this.amimationFrame) {
+      this.ctx.clearRect(0, 0, this.width, this.height);
+      this.ctxSrc2.clearRect(0, 0, this.width, this.height);
+      this.ctxPre.map((c, i) => {
+        c.clearRect(0, 0, this.width, this.height);
+        this.ctxSrc[i].clearRect(0, 0, this.width, this.height);
+      })
       window.cancelAnimationFrame(this.amimationFrame)
       this.amimationFrame = undefined
     }
   }
 
   generateThumbnail2() {
-    // const count = this.elCount
-
-    // TODO: See if we can set this once.
-    // Initial attempts had unexpected results.
     const width = this.width
     const height = this.height
-
-
+    // TODO: See if we can set this once.
+    // Initial attempts had unexpected results.
     // Reverse "pixel size" because UI range only goes min to max
     // 12 = max pixel size.
     const sizeReverse = this.pixelSizeMax - this.pixelSize
@@ -114,35 +136,42 @@ const Trails = class {
     const h = height * size
     const ctx = this.ctx
     const pCtx = this.ctxPre
+    const i = this.elMaxDouble
 
-    // Working multi choppy
-    for (let i = 0; i < this.elMax; i++) {
-      // Remove to make infinite
-      if (i === 0 && this.imgData[0]) {
-        this.ctx.putImageData(this.imgData[0], 0, 0)
-      }
-      if (this.mode === 'blur' || this.mode === 'pixelate') {
-        // draw the original image at a fraction of the final size
-        pCtx[i].drawImage(this.video, 0, 0, w, h)
-        pCtx[i].drawImage(this.cPre[i], 0, 0, w, h, 0, 0, width, height)
-      } else {
-        pCtx[i].drawImage(this.video, 0, 0, width, height)
-      }
+    this.ctxSrc2.drawImage(this.video, 0, 0, width, height)
 
-      this.imgDataNormal[i] = pCtx[i].getImageData(0, 0, width, height)
-      this.imgData[i] = pCtx[i].createImageData(width, height)
-      this.addGreenScreen(this.imgData[i], this.imgDataNormal[i]) // , width, height
-      pCtx[i].putImageData(this.imgData[i], 0, 0)
-      ctx.drawImage(this.cPre[i], 0, 0)
-      
-
-      
-
+    if (this.mode === 'blur' || this.mode === 'pixelate') {
+      // draw the original image at a fraction of the final size
+      pCtx[i].drawImage(this.video, 0, 0, w, h)
+      pCtx[i].drawImage(this.cPre[i], 0, 0, w, h, 0, 0, width, height)
+    } else {
+      pCtx[i].drawImage(this.video, 0, 0, width, height)
     }
+
+    this.imgDataNormal[i] = pCtx[i].getImageData(0, 0, width, height)
+    this.imgData[i] = pCtx[i].createImageData(width, height)
+    this.addGreenScreen(this.imgData[i], this.imgDataNormal[i]) // , width, height
+    pCtx[i].putImageData(this.imgData[i], 0, 0)
+    ctx.drawImage(this.cPre[i], 0, 0, width, height)
+
+    // Cover over trail with video
+    this.ctxSrc[i].drawImage(this.cPre[i], 0, 0, width, height)
+
+    const pattern = this.ctxSrc[i].createPattern(this.cSrc2, 'no-repeat')
+    // fill with video
+    this.ctxSrc[i].globalCompositeOperation = 'source-in'
+    this.ctxSrc[i].fillStyle = pattern // 'rgba(0, 0, 0, 0)'
+    this.ctxSrc[i].fillRect(0, 0, width, height)
+
+    // draw original image in normal mode
+    this.ctxSrc[i].globalCompositeOperation = 'source-over'
+    ctx.drawImage(this.cSrc[i], 0, 0, width, height)
+    // console.log(this.cSrc[i].width, width)
+
+    this.elMaxDouble = this.elMaxDouble === this.elMax - 1 ? 0 : this.elMaxDouble + 1
   }
 
   addGreenScreen(imgData, imgDataNormal) {
-    // , width, height
     let i
     let r = 0
     let g = 0
@@ -179,10 +208,15 @@ const Trails = class {
       }
 
       // // Fade pixels at end of range
-      // if (r < this.selectedR - 60 || r > this.selectedR + 60 ||
-      //   g < this.selectedG - 60 || g > this.selectedG + 60 ||
-      //   b < this.selectedB - 60 || b > this.selectedB + 60) {
-      //   a = a - 240;
+      // if (
+      //   r < this.selectedR - 60 ||
+      //   r > this.selectedR + 60 ||
+      //   g < this.selectedG - 60 ||
+      //   g > this.selectedG + 60 ||
+      //   b < this.selectedB - 60 ||
+      //   b > this.selectedB + 60
+      // ) {
+      //   a = a - 120
       // }
 
       // a !== 0

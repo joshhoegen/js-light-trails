@@ -267,12 +267,12 @@ export default class GreenScreen extends React.Component {
               loop="loop"
               preload="auto"
               autoPlay
-              width={600}
-              height={400}
+              width={952}
+              height={737}
             />
           </div>
           <div id="output">
-            <canvas id="videoscreen" width={600} height={400}>
+            <canvas id="videoscreen" >
               <p>Sorry your browser does not support HTML5</p>
             </canvas>
           </div>
